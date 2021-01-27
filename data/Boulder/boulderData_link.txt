@@ -1,0 +1,3 @@
+Link to boulder data: 
+(contains infor about the attributes) 
+https://open-data.bouldercolorado.gov/datasets/053aadbad62c4ef784d1fbece60adedd_0

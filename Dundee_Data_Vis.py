@@ -28,19 +28,19 @@ print(data.describe())
 # Finder det site der har negative værdier 
 #print(data["Site"][data["Total kWh"]<0])
 
-plt.scatter(data["Start Date"],data["Total kWh"])
+plt.scatter(data["CP ID"],data["Total kWh"])
 plt.show()
 #Der bliver ladet meget mere i starten af året end i slutningen??
 
 
 # Finder corr mellem variable 
-corr = data.corr()
-print(corr)
+#corr = data.corr()
+#print(corr)
 
 
 # Mangler col med tid??
-sns.pairplot(data)
-plt.show()
+#sns.pairplot(data)
+#plt.show()
 
 
 

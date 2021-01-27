@@ -6,8 +6,10 @@ cpdata = pd.read_csv("data\ChargePoint Data 2017Q4.csv")
 #print(padata.head())
 print(cpdata.isna().sum())
 
-print(len(cpdata["Longitude"].unique()))
-#print(cpdata.shape)
+#print((cpdata["Longitude"].unique()))
+#print(padata2.shape)
+
+#print(padata2["Day"])
 
 # I dont see a huge difference in the two links? and still only 7 chargers??? and 5 MAC Adresses??
 # the same latitudes and longitudes 

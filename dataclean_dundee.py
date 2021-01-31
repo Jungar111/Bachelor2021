@@ -43,6 +43,7 @@ class clean_dundee:
 if __name__ == '__main__':
     c = clean_dundee()
     dundee = c.clean_data()
+    print(dundee.shape)
     #dundee.to_csv("testdund.csv")
     
     

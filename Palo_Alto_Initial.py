@@ -13,6 +13,8 @@ class clean_paloalto:
         self.data=self.pa_data.drop(["Address 2","EVSE ID","County","System S/N","Model Number","Transaction Date (Pacific Time)"],axis=1)
         self.data=self.data.dropna()
         self.data.index=range(len(self.data))
+        codes,uniques = pd.factorize(self.data["MAC Address"])
+        self.data["ID"] = codes
         self.to_date(self.data)
         self.to_float(self.data)
         return self.data
@@ -27,7 +29,7 @@ class clean_paloalto:
         df["End Date"]=pd.to_datetime(df["End Date"],format="%m/%d/%Y %H:%M", errors="coerce")
         df["Total Duration (hh:mm:ss)"]=pd.to_datetime(df["Total Duration (hh:mm:ss)"],format="%H:%M:%S")
         df["Charging Time (hh:mm:ss)"]=pd.to_datetime(df["Charging Time (hh:mm:ss)"],format="%H:%M:%S")
-        
+
 
 class viz:
     def normdistr(self,data):
@@ -75,14 +77,30 @@ class viz:
         plt.scatter(data["Start Date"],data["Energy (kWh)"],s=0.1)
         plt.show()
 
+    def by_dateplot(self,df):
+        df1 = df.sort_values(by="Start Date")
+        first_use = []
+        ID = [i for i in range(len(df1["MAC Address"].unique()))]
+        ID = {df1["MAC Address"].unique()[i]:ID[i] for i in range(len(ID))}
+        print(ID)
+        for first in df1["MAC Address"].unique():
+            dates = (df1["Start Date"][df1["MAC Address"]==first])
+            first_use.append(dates.min())
+        
+
+        plt.hist(first_use,ID)
+        plt.show()
 
 if __name__=='__main__':
     c = clean_paloalto()
     v = viz()
     data = c.clean_data()
+    
     #v.basisplots(data)
-    #print(data["Energy (kWh)"].dtypes)
-    v.pairsplot(data)
-    #c.expdistr()
+    #v.by_dateplot(data)
+
+    #print(len(data["MAC Address"].unique()))
+    #v.pairsplot(data)
+    #v.expdistr(data)
     #v.lognormdistr(data)
 

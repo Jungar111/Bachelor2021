@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from scipy.stats.morestats import median_test
 import seaborn as sns
 from dataclean_dundee import clean_dundee
 
@@ -22,13 +23,22 @@ class datavis:
         k = 0
         for i in range(shapex):
             for j in range(shapey):
-                if "time" not in cols[k]:
-                    ax[i,j].hist(df[cols[k]])
+                try:
+                    if "date" in cols[k].lower() or "Group" in cols[k] or "Site" in cols[k] or "Model" in cols[k]:
+                        ax[i,j].hist(df[cols[k]])
+                        ax[i,j].set_xticks([])
+                    else:
+                        ax[i,j].hist(df[cols[k]])
                     ax[i,j].title.set_text(cols[k])
                     k += 1
-                else:
-                    continue
+                except:
+                    ax[i,j].title.set_text(cols[k])
+                    k += 1
         
+        plt.show()
+    
+    def corrPlot(self, df, *cols):
+        sns.pairplot(df[list(cols)])
         plt.show()
 
         
@@ -37,12 +47,13 @@ class datavis:
 if __name__ == "__main__":
     d = datavis()
     c = clean_dundee()
-    d.distplot(c.clean_data(), 3, 5)
+    
+    #d.distplot(c.clean_data(), 3, 5)
+
+    d.corrPlot(c.clean_data(),("datetime_start", "Total kWh"))
     
     
     #d.pairs_plot()
-    axes = plt.gca()
-    axes.set_xlim([0,30])
     
     #sns.histplot(dundee["Total kWh"], ax=axes)
     #plt.show()

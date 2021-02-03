@@ -4,9 +4,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy
 import math
+from sys import platform
+
 class clean_paloalto:
     def __init__(self):
-        self.pa_data = pd.read_csv("data\ChargePoint Data 2017Q4.csv")
+        if platform == "win32":
+            self.pa_data = pd.read_csv("data\ChargePoint Data 2017Q4.csv")
+        elif platform == "darwin":
+            self.pa_data = pd.read_csv("data/ChargePoint Data 2017Q4.csv")
+        
     
     def clean_data(self):
         # We can drop EVSE ID, since mac address has more obs. 
@@ -14,8 +20,8 @@ class clean_paloalto:
         self.data=self.data.dropna()
         self.data.index=range(len(self.data))
         self.to_date(self.data)
-        self.to_float(self.data)
-        self.drop_strangedata(self.data)
+        #self.to_float(self.data)
+        #self.drop_strangedata(self.data)
         return self.data
     
     def drop_strangedata(self,df):

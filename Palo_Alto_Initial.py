@@ -15,16 +15,13 @@ class clean_paloalto:
         self.data.index=range(len(self.data))
         self.to_date(self.data)
         self.to_float(self.data)
-        self.drop_strangedata(self.data)
         return self.data
-    
-    def drop_strangedata(self,df):
-        df["Charge Duration (mins)"]=df[df["Charge Duration (mins)"]!=" 1,104 "]
-    
+
     def to_float(self,df):
         df["Charge Duration (mins)"][df["Charge Duration (mins)"]==" -   "]=0
-        df["Charge Duration (mins)"]=pd.to_numeric(df["Charge Duration (mins)"])
-    
+        df["Charge Duration (mins)"]=pd.to_numeric(df["Charge Duration (mins)"],errors='coerce')
+
+
     def to_date(self,df):
         df["Start Date"]=pd.to_datetime(df["Start Date"],format="%m/%d/%Y %H:%M", errors="coerce")
         df["End Date"]=pd.to_datetime(df["End Date"],format="%m/%d/%Y %H:%M", errors="coerce")
@@ -63,7 +60,8 @@ class viz:
             plt.show()
 
     def pairsplot(self,data):
-        sns.pairplot(data[["Energy (kWh)","GHG Savings (kg)","Gasoline Savings (gallons)","Port Number","Postal Code","Fee"]])
+        #sns.pairplot(data[["Energy (kWh)","GHG Savings (kg)","Gasoline Savings (gallons)","Port Number","Postal Code","Fee"]])
+        sns.pairplot(data[["Energy (kWh)","Charge Duration (mins)"]])
         plt.show()
 
     def basisplots(self,data):
@@ -82,9 +80,9 @@ if __name__=='__main__':
     c = clean_paloalto()
     v = viz()
     data = c.clean_data()
-    v.basisplots(data)
+    #v.basisplots(data)
     #print(data["Energy (kWh)"].dtypes)
-    #c.pairsplot()
+    v.pairsplot(data)
     #c.expdistr()
     #v.lognormdistr(data)
 

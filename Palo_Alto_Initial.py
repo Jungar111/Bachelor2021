@@ -17,6 +17,7 @@ class clean_paloalto:
         self.data["ID"] = codes
         self.to_date(self.data)
         self.to_float(self.data)
+        self.pair(self.data)
         return self.data
 
     def to_float(self,df):
@@ -29,6 +30,24 @@ class clean_paloalto:
         df["End Date"]=pd.to_datetime(df["End Date"],format="%m/%d/%Y %H:%M", errors="coerce")
         df["Total Duration (hh:mm:ss)"]=pd.to_datetime(df["Total Duration (hh:mm:ss)"],format="%H:%M:%S")
         df["Charging Time (hh:mm:ss)"]=pd.to_datetime(df["Charging Time (hh:mm:ss)"],format="%H:%M:%S")
+    
+    def pair(self,df, print=False):
+        pairlocation = []
+        for index, longitude in enumerate(df["Longitude"]):
+            pairlocation.append(str(df["Latitude"][index])+"x"+str(longitude))
+        df["Pairlocation"] = pairlocation
+
+        emptymac = [[] for i in range(len(df["Pairlocation"].unique()))]
+        location = dict(zip(df["Pairlocation"].unique(),emptymac))
+        for pair in df["Pairlocation"].unique():
+            location[pair]=list(df["MAC Address"][df["Pairlocation"]==pair].unique())
+
+        if print:
+            for key, value in location.items():
+                if len(value)>1:
+                    print(key,value)
+        
+
 
 
 class viz:
@@ -78,18 +97,27 @@ class viz:
         plt.show()
 
     def by_dateplot(self,df):
-        df1 = df.sort_values(by="Start Date")
+        df1 = df.sort_values(by="Pairlocation")
         first_use = []
-        ID = [i for i in range(len(df1["MAC Address"].unique()))]
-        ID = {df1["MAC Address"].unique()[i]:ID[i] for i in range(len(ID))}
-        print(ID)
-        for first in df1["MAC Address"].unique():
-            dates = (df1["Start Date"][df1["MAC Address"]==first])
+        for first in df1["Pairlocation"].unique():
+            dates = (df1["Start Date"][df1["Pairlocation"]==first])
             first_use.append(dates.min())
-        
-
-        plt.hist(first_use,ID)
+        last_use = []
+        for last in df1["Pairlocation"].unique():
+            dates = (df1["Start Date"][df1["Pairlocation"]==last])
+            last_use.append(dates.max())
+    
+        plt.scatter(df["Pairlocation"].unique(),first_use)
+        plt.scatter(df["Pairlocation"].unique(),last_use, c="red")
+        plt.title("First and last charge for stations")
         plt.show()
+
+        chargings = []
+        for days in df["Start Date"]:
+            chargings.append(len(df["Charge Duration (mins)"][[df["Start Date"]==days] and df["Charge Duration (mins)"]!=0]))
+        print(len(chargings)) 
+
+
 
 if __name__=='__main__':
     c = clean_paloalto()
@@ -97,7 +125,8 @@ if __name__=='__main__':
     data = c.clean_data()
     
     #v.basisplots(data)
-    #v.by_dateplot(data)
+    v.by_dateplot(data)
+    #c.pair(data,true)
 
     #print(len(data["MAC Address"].unique()))
     #v.pairsplot(data)

@@ -112,10 +112,17 @@ class viz:
         plt.title("First and last charge for stations")
         plt.show()
 
-        chargings = []
-        for days in df["Start Date"]:
-            chargings.append(len(df["Charge Duration (mins)"][[df["Start Date"]==days] and df["Charge Duration (mins)"]!=0]))
-        print(len(chargings)) 
+
+        ##### Works but takes a long time, see Chargings_pr_day.png instead in Teams 
+        #chargings = []
+        #for days in df["Start Date"].dt.date.unique():
+        #    chargings.append(len(df["Charge Duration (mins)"][(df["Start Date"].dt.date==days) & (df["Charge Duration (mins)"]!=0)]))
+        
+        #plt.bar(df["Start Date"].dt.date.unique(),chargings)
+        #plt.title("Number of chargings pr. day")
+        #plt.ylabel("Chargings pr. day")
+        #plt.xlabel("Dates")
+        #plt.show()
 
 
 
@@ -127,6 +134,7 @@ if __name__=='__main__':
     #v.basisplots(data)
     v.by_dateplot(data)
     #c.pair(data,true)
+
 
     #print(len(data["MAC Address"].unique()))
     #v.pairsplot(data)

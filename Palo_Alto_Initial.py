@@ -144,16 +144,18 @@ class viz:
 
 
         ##### Works but takes a long time, see Chargings_pr_day.png instead in Teams 
-        #chargings = []
-        #for days in df["Start Date"].dt.date.unique():
-        #    chargings.append(len(df["Charge Duration (mins)"][(df["Start Date"].dt.date==days) & (df["Charge Duration (mins)"]!=0)]))
+        chargings = []
+        for days in df["Start Date"].dt.date.unique():
+            chargings.append(len(df["Charge Duration (mins)"][(df["Start Date"].dt.date==days) & (df["Charge Duration (mins)"]!=0)]))
         
-        #plt.bar(df["Start Date"].dt.date.unique(),chargings)
-        #plt.title("Number of chargings pr. day")
-        #plt.ylabel("Chargings pr. day")
-        #plt.xlabel("Dates")
-        #plt.show()
+        plt.bar(df["Start Date"].dt.date.unique(),chargings,align='center',width=1.0)
+        plt.title("Number of chargings pr. day")
+        plt.ylabel("Chargings pr. day")
+        plt.xlabel("Dates")
+        plt.show()
 
+        # df["Start Date"][df["Start Date"].dt.year==2016] insert for given 
+        # Clearly see weekend lows 
 
 
 if __name__=='__main__':
@@ -162,7 +164,7 @@ if __name__=='__main__':
     data = c.clean_data()
     
     #v.basisplots(data)
-    #v.by_dateplot(data)
+    v.by_dateplot(data)
     #c.pair(data,true)
     #c.weekday(data)
 

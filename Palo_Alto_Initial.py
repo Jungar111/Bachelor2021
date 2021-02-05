@@ -18,7 +18,6 @@ class clean_paloalto:
         self.to_date(self.data)
         self.to_float(self.data)
         self.pair(self.data)
-        self.weekday(self.data)
         self.locationdf(self.data)
         return self.data
 
@@ -49,9 +48,6 @@ class clean_paloalto:
                 if len(value)>1:
                     print(key,value)
     
-    def weekday(self,df):
-        (df["Start Date"].dt.weekday)
-    
     def locationdf(self,df):
         df1 = df.sort_values(by="Pairlocation")
         first_use = []
@@ -68,13 +64,17 @@ class clean_paloalto:
         dfloc["First use"] = first_use
         dfloc["Last use"] = last_use
 
-        #loclat = []
-        #for loc in df1["Pairlocation"].unique():
-        #    lat = (df1["Latitude"][df1["Pairlocation"]==loc])
-        #    loclat.append(lat[0])
-        #print(loclat)
-        #dfloc["Latitude"] = loclat
-        print(dfloc)
+        loclat = []
+        loclon = []
+        for loc in df1["Pairlocation"].unique():
+            lat = df1["Latitude"][df1["Pairlocation"]==loc].unique()
+            lon = df1["Longitude"][df1["Pairlocation"]==loc].unique()
+            loclat.append(lat[0])
+            loclon.append(lon[0])
+
+        dfloc["Latitude"] = loclat
+        dfloc["Longitude"] = loclon
+
 
         
 
@@ -161,7 +161,6 @@ if __name__=='__main__':
     v = viz()
     data = c.clean_data()
     
-    c.locationdf(data)
     #v.basisplots(data)
     #v.by_dateplot(data)
     #c.pair(data,true)

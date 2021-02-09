@@ -24,6 +24,8 @@ class clean_paloalto:
         self.to_date(self.data)
         self.to_float(self.data)
         self.pair(self.data)
+        self.weekday(self.data)
+        self.locationdf(self.data)
         return self.data
 
     def to_float(self,df):
@@ -52,6 +54,34 @@ class clean_paloalto:
             for key, value in location.items():
                 if len(value)>1:
                     print(key,value)
+    
+    def weekday(self,df):
+        (df["Start Date"].dt.weekday)
+    
+    def locationdf(self,df):
+        df1 = df.sort_values(by="Pairlocation")
+        first_use = []
+        for first in df1["Pairlocation"].unique():
+            dates = (df1["Start Date"][df1["Pairlocation"]==first])
+            first_use.append(dates.min())
+        last_use = []
+        for last in df1["Pairlocation"].unique():
+            dates = (df1["Start Date"][df1["Pairlocation"]==last])
+            last_use.append(dates.max())
+        
+        dfloc=pd.DataFrame()
+        dfloc["Pairlocation"]=df1["Pairlocation"].unique()
+        dfloc["First use"] = first_use
+        dfloc["Last use"] = last_use
+
+        #loclat = []
+        #for loc in df1["Pairlocation"].unique():
+        #    lat = (df1["Latitude"][df1["Pairlocation"]==loc])
+        #    loclat.append(lat[0])
+        #print(loclat)
+        #dfloc["Latitude"] = loclat
+        print(dfloc)
+
         
 
 
@@ -118,10 +148,17 @@ class viz:
         plt.title("First and last charge for stations")
         plt.show()
 
-        chargings = []
-        for days in df["Start Date"]:
-            chargings.append(len(df["Charge Duration (mins)"][[df["Start Date"]==days] and df["Charge Duration (mins)"]!=0]))
-        print(len(chargings)) 
+
+        ##### Works but takes a long time, see Chargings_pr_day.png instead in Teams 
+        #chargings = []
+        #for days in df["Start Date"].dt.date.unique():
+        #    chargings.append(len(df["Charge Duration (mins)"][(df["Start Date"].dt.date==days) & (df["Charge Duration (mins)"]!=0)]))
+        
+        #plt.bar(df["Start Date"].dt.date.unique(),chargings)
+        #plt.title("Number of chargings pr. day")
+        #plt.ylabel("Chargings pr. day")
+        #plt.xlabel("Dates")
+        #plt.show()
 
 
 
@@ -130,9 +167,11 @@ if __name__=='__main__':
     v = viz()
     data = c.clean_data()
     
+    c.locationdf(data)
     #v.basisplots(data)
-    v.by_dateplot(data)
+    #v.by_dateplot(data)
     #c.pair(data,true)
+    #c.weekday(data)
 
     #print(len(data["MAC Address"].unique()))
     #v.pairsplot(data)

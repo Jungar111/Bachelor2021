@@ -88,3 +88,6 @@ plt.plot(boulder_df['Charging_Time__minutes_'], boulder_df['Energy__kWh_'], '.')
 plt.show()
 
 print(boulder_df['Port_Type'].unique()) #definatley not fast charging 
+
+print(1+1)
+

@@ -16,7 +16,7 @@ BBox = (data.Latitude.min() - 0.001,   data.Latitude.max() + 0.001,
 
 name = "PaloAlto.png"
 api = MapBoxAPI()
-api.get_image((BBox[0], BBox[1]), (BBox[2], BBox[3]), name)
+api.get_image((BBox[0], BBox[1]), (BBox[2], BBox[3]), name, 100)
 
 
 paloaltoimg = plt.imread(f'img/{name}')

@@ -15,10 +15,26 @@ class modelling:
         lm1.fit(x,y) 
         Y_pred = lm1.predict(x)
 
-        plt.scatter(x,y)
-        plt.plot(x,Y_pred)
+        #plt.scatter(x,y,c=df["Port Type"])
+
+        plt.hexbin(x,y, gridsize=50)
+        #plt.plot(x,Y_pred, c="red")
         plt.show()
-    #alfn
+    
+
+    def lmmodels1(self,df, type):
+        from sklearn.linear_model import LinearRegression
+        x = df[df["Port Number"]==type]["Charge Duration (mins)"].values.reshape(-1, 1)
+        y =  df[df["Port Number"]==type]["Energy (kWh)"].values.reshape(-1, 1)
+        lm1 = LinearRegression()
+        lm1.fit(x,y) 
+        Y_pred = lm1.predict(x)
+
+        #plt.scatter(x,y,c=df["Port Type"])
+
+        plt.hexbin(x,y, gridsize=50)
+        #plt.plot(x,Y_pred, c="red")
+        plt.show()
     
 
 
@@ -27,4 +43,5 @@ if __name__=='__main__':
     m = modelling()
     data = c.clean_data()
     
-    m.lmmodels(data)
+    #m.lmmodels(data)
+    m.lmmodels1(data,1)

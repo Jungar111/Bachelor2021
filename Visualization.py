@@ -69,11 +69,26 @@ class viz:
         dfdate = pd.DataFrame(np.transpose([df["Pairlocation"].unique(),first_use,last_use]))
         dfdate.columns =['Pairlocation',"First use", 'Last use']
         dfdate["Online time"] =  dfdate["Last use"]-dfdate["First use"]
-        dfdate = dfdate.sort_values(by = "Online time")
-        fig = px.timeline(dfdate, x_start="First use", x_end="Last use", y="Pairlocation")
-        fig.show()
+        #dfdate = dfdate.sort_values(by = "Online time")
+        # fig = px.timeline(dfdate, x_start="First use", x_end="Last use", y="Pairlocation")
+        # fig.show()
 
 
+        dfclean = df
+        #dfdate = dfdate.drop(['Unnamed: 0'], axis = 1) #['B', 'C'], axis=1
+        dfdate.set_index('Pairlocation')
+        dfclean = dfclean[['Pairlocation', 'MAC Address']] 
+        test2 = dfclean.drop_duplicates()#
+        #pd.set_option('display.max_rows', None)
+        #test2
+        #test2.shape
+        dfmerge = dfdate.merge(test2, how='inner', on = 'Pairlocation')
+        #dfmerge
+        #dfmerge.shape
+        fig1 = px.timeline(dfmerge, x_start="First use", x_end="Last use", y="MAC Address", color="Pairlocation")
+        fig1.show()
+        fig2 = px.timeline(dfmerge, x_start="First use", x_end="Last use", y="Pairlocation", color="MAC Address")
+        fig2.show()
 
         ##### Works but takes a long time, see Chargings_pr_day.png instead in Teams 
         #chargings = []

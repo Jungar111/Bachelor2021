@@ -16,10 +16,10 @@ class modelling:
         Y_pred = lm1.predict(x)
 
         plt.scatter(x,y)
-        plt.plot(x,Y_pred,c="red")
+        plt.plot(x,Y_pred)
         plt.show()
     
-    
+
 
 if __name__=='__main__':
     c = clean_paloalto()

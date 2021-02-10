@@ -67,7 +67,7 @@ class viz:
 
         
         dfdate = pd.DataFrame(np.transpose([df["Pairlocation"].unique(),first_use,last_use]))
-        dfdate.columns =['MAC Address',"First use", 'Last use']
+        dfdate.columns =['Pairlocation',"First use", 'Last use']
         dfdate["Online time"] =  dfdate["Last use"]-dfdate["First use"]
         dfdate = dfdate.sort_values(by = "Online time")
         fig = px.timeline(dfdate, x_start="First use", x_end="Last use", y="Pairlocation")

@@ -18,6 +18,7 @@ class modelling:
         plt.scatter(x,y)
         plt.plot(x,Y_pred)
         plt.show()
+    #alfn
     
 
 

@@ -18,6 +18,8 @@ class modelling:
         plt.scatter(x,y)
         plt.plot(x,Y_pred,c="red")
         plt.show()
+    
+    
 
 if __name__=='__main__':
     c = clean_paloalto()

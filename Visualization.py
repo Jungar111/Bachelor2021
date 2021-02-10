@@ -5,6 +5,7 @@ import numpy as np
 import scipy
 import math
 import plotly.express as px
+import matplotlib.patches as mpatches
 
 from Data_cleaning import clean_paloalto
 class viz:
@@ -57,15 +58,16 @@ class viz:
         df1 = df.sort_values(by="Pairlocation")
         first_use = []
         for first in df1["Pairlocation"].unique():
-            dates = (df1["Start Date"][df1["Pairlocation"]==first])
-            first_use.append(dates.min())
+           dates = (df1["Start Date"][df1["Pairlocation"]==first])
+           first_use.append(dates.min())
         last_use = []
         for last in df1["Pairlocation"].unique():
-            dates = (df1["Start Date"][df1["Pairlocation"]==last])
-            last_use.append(dates.max())
+           dates = (df1["Start Date"][df1["Pairlocation"]==last])
+           last_use.append(dates.max())
 
+        
         dfdate = pd.DataFrame(np.transpose([df["Pairlocation"].unique(),first_use,last_use]))
-        dfdate.columns =['Pairlocation',"First use", 'Last use']
+        dfdate.columns =['MAC Address',"First use", 'Last use']
         dfdate["Online time"] =  dfdate["Last use"]-dfdate["First use"]
         dfdate = dfdate.sort_values(by = "Online time")
         fig = px.timeline(dfdate, x_start="First use", x_end="Last use", y="Pairlocation")
@@ -77,23 +79,24 @@ class viz:
         #chargings = []
         #for days in df["Start Date"].dt.date.unique():
         #    chargings.append(len(df["Charge Duration (mins)"][(df["Start Date"].dt.date==days) & (df["Charge Duration (mins)"]!=0)]))
-        #
+        # 
         #plt.bar(df["Start Date"].dt.date.unique(),chargings,align='center',width=1.0)
+        #plt.plot(df["Start Date"],df["Fee"], c="red")
         #plt.title("Number of chargings pr. day")
-        #plt.ylabel("Chargings pr. day")
+        #plt.ylabel("Chargings pr. day/Fee")
         #plt.xlabel("Dates")
+        #red_patch = mpatches.Patch(color='blue', label='Number of chargings')
+        #blue_patch = mpatches.Patch(color='red', label='Fee')
+        #plt.legend(handles=[red_patch, blue_patch])
         #plt.show()
+
 
         # df["Start Date"][df["Start Date"].dt.year==2016] insert for given 
         # Clearly see weekend lows 
 
 if __name__=='__main__':
     c = clean_paloalto()
-    v = viz()
     data = c.clean_data()
+    v = viz()
+    v.by_dateplot(data)
     
-    #v.pairsplot(data)
-    #v.expdistr(data)
-    #v.lognormdistr(data)
-    #v.basisplots(data)
-    #v.by_dateplot(data)

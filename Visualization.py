@@ -67,27 +67,38 @@ class viz:
 
         
         dfdate = pd.DataFrame(np.transpose([df["Pairlocation"].unique(),first_use,last_use]))
-        dfdate.columns =['Pairlocation',"First use", 'Last use']
-        dfdate["Online time"] =  dfdate["Last use"]-dfdate["First use"]
+        dfdate.columns =['Pairlocation',"First use by location", 'Last use by location']
+        dfdate["Online time"] =  dfdate["First use by location"]-dfdate["Last use by location"]
         #dfdate = dfdate.sort_values(by = "Online time")
-        # fig = px.timeline(dfdate, x_start="First use", x_end="Last use", y="Pairlocation")
-        # fig.show()
+        
+
+        df2 = df.sort_values(by="MAC Address")
+        first_use2 = []
+        for first in df1["MAC Address"].unique():
+           dates = (df1["Start Date"][df1["MAC Address"]==first])
+           first_use2.append(dates.min())
+        last_use2 = []
+        for last in df1["MAC Address"].unique():
+           dates = (df1["Start Date"][df1["MAC Address"]==last])
+           last_use2.append(dates.max())
+
+        
+        dfdate2 = pd.DataFrame(np.transpose([df["MAC Address"].unique(),first_use2,last_use2]))
+        dfdate2.columns =['MAC Address',"First use by MAC", 'Last use by MAC']
+        dfdate2["Online time"] =  dfdate2["Last use by MAC"]-dfdate2["First use by MAC"]
 
 
         dfclean = df
-        #dfdate = dfdate.drop(['Unnamed: 0'], axis = 1) #['B', 'C'], axis=1
-        dfdate.set_index('Pairlocation')
+
         dfclean = dfclean[['Pairlocation', 'MAC Address']] 
         test2 = dfclean.drop_duplicates()#
-        #pd.set_option('display.max_rows', None)
-        #test2
-        #test2.shape
-        dfmerge = dfdate.merge(test2, how='inner', on = 'Pairlocation')
-        #dfmerge
-        #dfmerge.shape
-        fig1 = px.timeline(dfmerge, x_start="First use", x_end="Last use", y="MAC Address", color="Pairlocation")
+
+        dfmerge = dfdate.merge(test2, how='outer', on = 'Pairlocation')
+        dfmerge2 = dfdate2.merge(test2, how='outer', on = 'MAC Address')
+        
+        fig1 = px.timeline(dfmerge, x_start="First use by location", x_end="Last use by location", y="MAC Address", color="Pairlocation")
         fig1.show()
-        fig2 = px.timeline(dfmerge, x_start="First use", x_end="Last use", y="Pairlocation", color="MAC Address")
+        fig2 = px.timeline(dfmerge2, x_start="First use by MAC", x_end="Last use by MAC", y="Pairlocation", color="MAC Address")
         fig2.show()
 
         ##### Works but takes a long time, see Chargings_pr_day.png instead in Teams 
@@ -114,4 +125,5 @@ if __name__=='__main__':
     data = c.clean_data()
     v = viz()
     v.by_dateplot(data)
+    
     

@@ -22,17 +22,18 @@ class modelling:
         plt.show()
     
 
-    def lmmodels1(self,df, type):
+    def lmmodels1(self,df):
         from sklearn.linear_model import LinearRegression
-        x = df[df["Port Number"]==type]["Charge Duration (mins)"].values.reshape(-1, 1)
-        y =  df[df["Port Number"]==type]["Energy (kWh)"].values.reshape(-1, 1)
+        x = df["Charge Duration (mins)"].values.reshape(-1, 1)
+        y =  df["Energy (kWh)"].values.reshape(-1, 1)
         lm1 = LinearRegression()
         lm1.fit(x,y) 
         Y_pred = lm1.predict(x)
 
-        #plt.scatter(x,y,c=df["Port Type"])
+        plt.scatter(x,y,c=pd.factorize(df["Port Type"])[0], alpha=0.3)
+        #plt.scatter(x,y)
 
-        plt.hexbin(x,y, gridsize=50)
+        #plt.hexbin(x,y, gridsize=50)
         #plt.plot(x,Y_pred, c="red")
         plt.show()
     
@@ -44,4 +45,4 @@ if __name__=='__main__':
     data = c.clean_data()
     
     #m.lmmodels(data)
-    m.lmmodels1(data,1)
+    m.lmmodels1(data)

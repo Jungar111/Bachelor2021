@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy
 import math
+import plotly.express as px
 class clean_paloalto:
     def __init__(self):
         self.pa_data = pd.read_csv("data\ChargePoint Data 2017Q4.csv")
@@ -136,23 +137,26 @@ class viz:
         for last in df1["Pairlocation"].unique():
             dates = (df1["Start Date"][df1["Pairlocation"]==last])
             last_use.append(dates.max())
-    
-        plt.scatter(df["Pairlocation"].unique(),first_use)
-        plt.scatter(df["Pairlocation"].unique(),last_use, c="red")
-        plt.title("First and last charge for stations")
-        plt.show()
+
+        dfdate = pd.DataFrame(np.transpose([df["Pairlocation"].unique(),first_use,last_use]))
+        dfdate.columns =['Pairlocation',"First use", 'Last use']
+        dfdate["Online time"] =  dfdate["Last use"]-dfdate["First use"]
+        dfdate = dfdate.sort_values(by = "Online time")
+        fig = px.timeline(dfdate, x_start="First use", x_end="Last use", y="Pairlocation")
+        fig.show()
+
 
 
         ##### Works but takes a long time, see Chargings_pr_day.png instead in Teams 
-        chargings = []
-        for days in df["Start Date"].dt.date.unique():
-            chargings.append(len(df["Charge Duration (mins)"][(df["Start Date"].dt.date==days) & (df["Charge Duration (mins)"]!=0)]))
-        
-        plt.bar(df["Start Date"].dt.date.unique(),chargings,align='center',width=1.0)
-        plt.title("Number of chargings pr. day")
-        plt.ylabel("Chargings pr. day")
-        plt.xlabel("Dates")
-        plt.show()
+        #chargings = []
+        #for days in df["Start Date"].dt.date.unique():
+        #    chargings.append(len(df["Charge Duration (mins)"][(df["Start Date"].dt.date==days) & (df["Charge Duration (mins)"]!=0)]))
+        #
+        #plt.bar(df["Start Date"].dt.date.unique(),chargings,align='center',width=1.0)
+        #plt.title("Number of chargings pr. day")
+        #plt.ylabel("Chargings pr. day")
+        #plt.xlabel("Dates")
+        #plt.show()
 
         # df["Start Date"][df["Start Date"].dt.year==2016] insert for given 
         # Clearly see weekend lows 

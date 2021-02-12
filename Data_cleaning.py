@@ -2,12 +2,17 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+import platform
 import scipy
 import math
 import plotly.express as px
 class clean_paloalto:
     def __init__(self):
-        self.pa_data = pd.read_csv("data\ChargePoint Data 2017Q4.csv")
+        if platform.system() == "Darwin":
+            self.pa_data = pd.read_csv("data/ChargePoint Data 2017Q4.csv")
+        elif platform.system() == "Windows":
+            self.pa_data = pd.read_csv("data\ChargePoint Data 2017Q4.csv")
+        
     
     def clean_data(self):
         # We can drop EVSE ID, since mac address has more obs. 

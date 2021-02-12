@@ -58,7 +58,7 @@ data = data.merge(df[["ID","mean","time"]], left_on="Pairlocation", right_on ="I
 
 
 fig, ax = plt.subplots(figsize = (8,7))
-ax.scatter(data.Longitude, data.Latitude, zorder=1, alpha= 0.2, c=data["time"], s=data["mean"]/10)
+ax.scatter(np.round(data.Longitude,3), np.round(data.Latitude,3), zorder=1, alpha= 0.2, c=data["time"], s=data["mean"]/10)
 ax.set_title('Plotting Spatial Data on Palo Alto Map')
 ax.set_xlim(BBox[0],BBox[1])
 ax.set_ylim(BBox[2],BBox[3])

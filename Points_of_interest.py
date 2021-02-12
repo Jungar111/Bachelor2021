@@ -16,21 +16,27 @@ class POI:
         return venue
     
     def getpd(self,df):
-        lat1,lon1 = self.getloc(df)
+        #lat1,lon1 = self.getloc(df)
+        lat1 = [37.450375-0.005*i for i in range(7)]
+        lon1 = [-122.11148-0.005*i for i in range(12)]
+        
         name = []
         lat = []
         lon = []
         cat = []
+        notimportant = ["Parking","Tree","Road"]
         for j in range(len(lat1)):
-            venue = self.getvenue(lat1[j],lon1[j],500,30)
-            for i in range(len(venue)):
-                try:
-                    cat.append(venue[i]["categories"][0]["name"])
-                    name.append(venue[i]["name"])
-                    lat.append(venue[i]["location"]["lat"])
-                    lon.append(venue[i]["location"]["lng"])
-                except:
-                    continue
+            for k in range(len(lon1)):
+                venue = self.getvenue(lat1[j],lon1[k],500,50)
+                for i in range(len(venue)):
+                    try:
+                        if venue[i]["categories"][0]["name"] not in notimportant:
+                            cat.append(venue[i]["categories"][0]["name"])
+                            name.append(venue[i]["name"])
+                            lat.append(venue[i]["location"]["lat"])
+                            lon.append(venue[i]["location"]["lng"])
+                    except:
+                        continue
 
         poipd = pd.DataFrame({"Name":name,"Latitude":lat,"Longitude":lon,"Category":cat})
         return poipd

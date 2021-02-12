@@ -24,15 +24,15 @@ class analysis:
 class clean:
     def __init__(self):
         self.data = pd.read_csv("points_of_int.csv")
-        self.data=self.data[self.data["Longitude"]!=self.data["Longitude"].min()]
+        self.data=self.data[(self.data["Longitude"]<-122.10) & (self.data["Longitude"]>-122.2)]
     
 
 if __name__=='__main__':
     a = analysis()
     c = clean()
     data=c.data
-    a.sjov(data)
-
+    #a.sjov(data)
+    print(data["Category"].unique())
 
     
 

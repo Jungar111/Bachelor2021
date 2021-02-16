@@ -1,6 +1,7 @@
 import pandas as pd 
 from MapBoxApi import MapBoxAPI
 import matplotlib.pyplot as plt
+import re
 
 class analysis:
     def __init__(self):
@@ -23,17 +24,27 @@ class analysis:
 
 class clean:
     def __init__(self):
-        self.data = pd.read_csv("points_of_int.csv")
+        self.data = pd.read_csv("points_of_int1.csv")
         self.data=self.data[(self.data["Longitude"]<-122.10) & (self.data["Longitude"]>-122.2)]
+    
+    # def categories(self,data):
+    #     data=data.reset_index()
+    #     for i in range(len(data["Category"])):
+    #         if re.search("^.*Food.*$", data["Category"][i]):
+    #             print(re.search("^.*Food.*$", data["Category"][i]))
+    #             print(i)
+                
+    #             #data["Category"][i]="Resturant"
+
     
 
 if __name__=='__main__':
     a = analysis()
     c = clean()
     data=c.data
+    #c.categories(data)
     #a.sjov(data)
-    print(data["Category"].unique())
-
+    print((data["Category"].unique()))
     
 
 

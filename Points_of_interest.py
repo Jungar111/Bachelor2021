@@ -7,8 +7,18 @@ class POI:
         self.conn = http.client.HTTPSConnection("api.foursquare.com")
         self.payload = ''
         self.headers = {}
-    def getvenue(self,lat,long,radius,n):
-        url = f"/v2/venues/search?client_id=VEZEHWT3U5FKX4KM0P2GVR33SW4ST2VQKC0RN5SYOJT3LGJ1%0A%0A&client_secret=V5GLVQJSK5HJHKGEYE0XQ3KY2CISS4SYZGGAPOVN5HOD0ZNU&v=20190425&ll={lat},{long}&intent=browse&radius={radius}&limit={n}"
+
+    def getcategory(self):
+        url1 = "/v2/venues/categories?client_id=VEZEHWT3U5FKX4KM0P2GVR33SW4ST2VQKC0RN5SYOJT3LGJ1%0A%0A&client_secret=V5GLVQJSK5HJHKGEYE0XQ3KY2CISS4SYZGGAPOVN5HOD0ZNU&v=20190425"
+        self.conn.request("GET", url1, self.payload, self.headers)
+        self.res = self.conn.getresponse()
+        self.data = self.res.read()
+        categories = json.loads(self.data.decode("utf-8"))["response"]["categories"]
+        return categories
+
+    
+    def getvenue(self,lat,long,radius,n, id):
+        url = f"/v2/venues/search?client_id=VEZEHWT3U5FKX4KM0P2GVR33SW4ST2VQKC0RN5SYOJT3LGJ1%0A%0A&client_secret=V5GLVQJSK5HJHKGEYE0XQ3KY2CISS4SYZGGAPOVN5HOD0ZNU&v=20190425&ll={lat},{long}&intent=browse&radius={radius}&limit={n}&categoryId={id}"
         self.conn.request("GET",url , self.payload, self.headers)
         self.res = self.conn.getresponse()
         self.data = self.res.read()
@@ -20,23 +30,27 @@ class POI:
         lat1 = [37.450375-0.005*i for i in range(7)]
         lon1 = [-122.11148-0.005*i for i in range(12)]
         
+        categories = self.getcategory()
+
         name = []
         lat = []
         lon = []
         cat = []
-        notimportant = ["Parking","Tree","Road"]
+        #notimportant = ["Parking","Tree","Road"]
         for j in range(len(lat1)):
             for k in range(len(lon1)):
-                venue = self.getvenue(lat1[j],lon1[k],500,50)
-                for i in range(len(venue)):
-                    try:
-                        if venue[i]["categories"][0]["name"] not in notimportant:
-                            cat.append(venue[i]["categories"][0]["name"])
+                for q in range(len(categories)):
+                    venue = self.getvenue(lat1[j],lon1[k],500,1,categories[q]["id"])
+                    for i in range(len(venue)):
+                        try:
+                            #if venue[i]["categories"][0]["name"] not in notimportant:
+                            #cat.append(venue[i]["categories"][0]["name"])
+                            cat.append(categories[q]["name"])
                             name.append(venue[i]["name"])
                             lat.append(venue[i]["location"]["lat"])
                             lon.append(venue[i]["location"]["lng"])
-                    except:
-                        continue
+                        except:
+                            continue
 
         poipd = pd.DataFrame({"Name":name,"Latitude":lat,"Longitude":lon,"Category":cat})
         return poipd
@@ -60,6 +74,7 @@ if __name__=='__main__':
     data = c.clean_data()
     p = POI()
     #print(p.getloc(data))
-    points_of_int = p.getpd(data)
-    print(points_of_int.head)
-    points_of_int.to_csv("points_of_int.csv")
+    #print(len(p.getcategory()))
+    points_of_int1 = p.getpd(data)
+    print(points_of_int1.head)
+    points_of_int1.to_csv("points_of_int1.csv")

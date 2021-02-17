@@ -66,11 +66,22 @@ class viz:
            last_use.append(dates.max())
 
         
-        dfdate = pd.DataFrame(np.transpose([df["Pairlocation"].unique(),first_use,last_use]))
-        dfdate.columns =['Pairlocation',"First use", 'Last use']
-        dfdate["Online time"] =  dfdate["Last use"]-dfdate["First use"]
+        dfdate = pd.DataFrame(np.transpose([df1["Pairlocation"].unique(),first_use,last_use]))
+        dfdate.columns =['Pairlocation',"First use by location", 'Last use by location']
+        dfdate["Online time"] =  dfdate['Last use by location']-dfdate['First use by location']
         dfdate = dfdate.sort_values(by = "Online time")
-        fig = px.timeline(dfdate, x_start="First use", x_end="Last use", y="Pairlocation")
+
+        dfclean = df
+
+        dfclean = dfclean[['Pairlocation', 'MAC Address']] 
+        test2 = dfclean.drop_duplicates()
+
+        dfmerge = dfdate.merge(test2, how='outer', on = 'Pairlocation')
+        # dfmerge2 = dfdate2.merge(test2, how='outer', on = 'MAC Address')
+        
+        
+
+        fig = px.timeline(dfmerge, x_start="First use by location", x_end="Last use by location", y="MAC Address", color="Pairlocation")
         fig.show()
 
 

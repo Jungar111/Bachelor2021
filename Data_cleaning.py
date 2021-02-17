@@ -6,6 +6,7 @@ import platform
 import scipy
 import math
 import plotly.express as px
+import datetime as dt
 class clean_paloalto:
     def __init__(self):
         if platform.system() == "Darwin":
@@ -40,6 +41,10 @@ class clean_paloalto:
         df["End Date"]=pd.to_datetime(df["End Date"],format="%m/%d/%Y %H:%M", errors="coerce")
         df["Total Duration (hh:mm:ss)"]=pd.to_datetime(df["Total Duration (hh:mm:ss)"],format="%H:%M:%S")
         df["Charging Time (hh:mm:ss)"]=pd.to_datetime(df["Charging Time (hh:mm:ss)"],format="%H:%M:%S")
+        df['Charging Time (hh:mm:ss)'] = df['Charging Time (hh:mm:ss)'] - dt.datetime(1900, 1, 1, 0, 0, 0)
+        df['Total Duration (hh:mm:ss)'] = df['Total Duration (hh:mm:ss)'] - dt.datetime(1900, 1, 1, 0, 0, 0)
+        df['Charging Time (hh:mm:ss)'] = df['Charging Time (hh:mm:ss)'].round('min')
+        df['Total Duration (hh:mm:ss)'] = df['Total Duration (hh:mm:ss)'].round('min')
     
     def pair(self,df, print=False):
         pairlocation = []

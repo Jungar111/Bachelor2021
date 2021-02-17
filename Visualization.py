@@ -66,40 +66,44 @@ class viz:
            last_use.append(dates.max())
 
         
-        dfdate = pd.DataFrame(np.transpose([df["Pairlocation"].unique(),first_use,last_use]))
+        dfdate = pd.DataFrame(np.transpose([df1["Pairlocation"].unique(),first_use,last_use]))
         dfdate.columns =['Pairlocation',"First use by location", 'Last use by location']
         dfdate["Online time"] =  dfdate["First use by location"]-dfdate["Last use by location"]
         #dfdate = dfdate.sort_values(by = "Online time")
         
 
-        df2 = df.sort_values(by="MAC Address")
-        first_use2 = []
-        for first in df1["MAC Address"].unique():
-           dates = (df1["Start Date"][df1["MAC Address"]==first])
-           first_use2.append(dates.min())
-        last_use2 = []
-        for last in df1["MAC Address"].unique():
-           dates = (df1["Start Date"][df1["MAC Address"]==last])
-           last_use2.append(dates.max())
+        # df2 = df.sort_values(by="MAC Address")
+
+        # first_use2 = []
+        # for first in df2["MAC Address"].unique():
+        #    dates = (df2["Start Date"][df2["MAC Address"]==first])
+        #    first_use2.append(dates.min())
+        # last_use2 = []
+        # for last in df2["MAC Address"].unique():
+        #    dates = (df2["Start Date"][df2["MAC Address"]==last])
+        #    last_use2.append(dates.max())
+
 
         
-        dfdate2 = pd.DataFrame(np.transpose([df["MAC Address"].unique(),first_use2,last_use2]))
-        dfdate2.columns =['MAC Address',"First use by MAC", 'Last use by MAC']
-        dfdate2["Online time"] =  dfdate2["Last use by MAC"]-dfdate2["First use by MAC"]
+        # dfdate2 = pd.DataFrame(np.transpose([df1["MAC Address"].unique(),first_use2,last_use2]))
+        # dfdate2.columns =['MAC Address',"First use by MAC", 'Last use by MAC']
+        # dfdate2["Online time"] =  dfdate2["Last use by MAC"]-dfdate2["First use by MAC"]
 
 
         dfclean = df
 
         dfclean = dfclean[['Pairlocation', 'MAC Address']] 
-        test2 = dfclean.drop_duplicates()#
+        test2 = dfclean.drop_duplicates()
 
         dfmerge = dfdate.merge(test2, how='outer', on = 'Pairlocation')
-        dfmerge2 = dfdate2.merge(test2, how='outer', on = 'MAC Address')
+        # dfmerge2 = dfdate2.merge(test2, how='outer', on = 'MAC Address')
         
+        
+
         fig1 = px.timeline(dfmerge, x_start="First use by location", x_end="Last use by location", y="MAC Address", color="Pairlocation")
         fig1.show()
-        fig2 = px.timeline(dfmerge2, x_start="First use by MAC", x_end="Last use by MAC", y="Pairlocation", color="MAC Address")
-        fig2.show()
+        # fig2 = px.timeline(dfmerge2, x_start="First use by MAC", x_end="Last use by MAC", y="Pairlocation", color="MAC Address")
+        # fig2.show()
 
         ##### Works but takes a long time, see Chargings_pr_day.png instead in Teams 
         #chargings = []

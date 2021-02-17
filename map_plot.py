@@ -1,7 +1,7 @@
 from numpy.lib.arraysetops import unique
 from Data_cleaning import clean_paloalto
 import matplotlib.pyplot as plt
-import contextily as cx
+#import contextily as cx
 import pandas as pd
 import numpy as np
 from MapBoxApi import MapBoxAPI
@@ -32,7 +32,7 @@ for date in data["Start Date"].dt.month.unique():
     print(date)
     for charger in data["Pairlocation"].unique():
         amount = data[(data["Start Date"].dt.month == date) & (data["Pairlocation"] == charger)].shape[0]
-        time = data["Charge Duration (mins)"][(data["Start Date"].dt.month == date) & (data["Pairlocation"] == charger)].mean()
+        time = data["Charging Time (hh:mm:ss)"][(data["Start Date"].dt.month == date) & (data["Pairlocation"] == charger)].mean()
         ID.append(charger)
         Date.append(date)
         Amount.append(amount)

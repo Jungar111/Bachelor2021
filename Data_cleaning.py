@@ -7,16 +7,17 @@ import math
 import plotly.express as px
 class clean_paloalto:
     def __init__(self):
-        self.pa_data = pd.read_csv("data\ChargePoint Data 2017Q4.csv")
+        self.pa_data = pd.read_csv("data\ChargePoint Data CY20Q4.csv")
     
     def clean_data(self):
-        # We can drop EVSE ID, since mac address has more obs. 
-        self.data=self.pa_data.drop(["Address 2","EVSE ID","County","System S/N","Model Number","Transaction Date (Pacific Time)"],axis=1)
+        # We can drop EVSE ID, since mac address has more obs.
+        # "Address 2", 
+        self.data=self.pa_data.drop(["EVSE ID","County","System S/N","Model Number","Transaction Date (Pacific Time)"],axis=1)
         self.to_date(self.data)
         self.data["Latitude"]=self.data["Latitude"].round(3)
         self.data["Longitude"]=self.data["Longitude"].round(3)
         self.data["MAC Address"]=self.data["MAC Address"].str.replace(":", "")
-        self.to_float(self.data)
+        #self.to_float(self.data)
         self.data=self.data.dropna()
         self.data.index=range(len(self.data))
         codes,uniques = pd.factorize(self.data["MAC Address"])
@@ -25,16 +26,16 @@ class clean_paloalto:
         self.locationdf(self.data)
         return self.data
 
-    def to_float(self,df):
-        df["Charge Duration (mins)"][df["Charge Duration (mins)"]==" -   "]=0
-        df["Charge Duration (mins)"]=pd.to_numeric(df["Charge Duration (mins)"],errors='coerce')
+    # def to_float(self,df):
+    #     df["Charge Duration (mins)"][df["Charge Duration (mins)"]==" -   "]=0
+    #     df["Charge Duration (mins)"]=pd.to_numeric(df["Charge Duration (mins)"],errors='coerce')
 
 
     def to_date(self,df):
         df["Start Date"]=pd.to_datetime(df["Start Date"],format="%m/%d/%Y %H:%M", errors="coerce")
         df["End Date"]=pd.to_datetime(df["End Date"],format="%m/%d/%Y %H:%M", errors="coerce")
-        df["Total Duration (hh:mm:ss)"]=pd.to_datetime(df["Total Duration (hh:mm:ss)"],format="%H:%M:%S")
-        df["Charging Time (hh:mm:ss)"]=pd.to_datetime(df["Charging Time (hh:mm:ss)"],format="%H:%M:%S")
+        df["Total Duration (hh:mm:ss)"]=pd.to_datetime(df["Total Duration (hh:mm:ss)"],format="%H:%M:%S", errors="coerce")
+        df["Charging Time (hh:mm:ss)"]=pd.to_datetime(df["Charging Time (hh:mm:ss)"],format="%H:%M:%S", errors="coerce")
     
     def pair(self,df, print=False):
         pairlocation = []

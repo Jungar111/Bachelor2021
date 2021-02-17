@@ -2,12 +2,18 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+import platform
 import scipy
 import math
 import plotly.express as px
+import datetime as dt
 class clean_paloalto:
     def __init__(self):
-        self.pa_data = pd.read_csv("data\ChargePoint Data 2017Q4.csv")
+        if platform.system() == "Darwin":
+            self.pa_data = pd.read_csv("data/ChargePoint Data 2017Q4.csv")
+        elif platform.system() == "Windows":
+            self.pa_data = pd.read_csv("data\ChargePoint Data 2017Q4.csv")
+        
     
     def clean_data(self):
         # We can drop EVSE ID, since mac address has more obs. 
@@ -35,6 +41,10 @@ class clean_paloalto:
         df["End Date"]=pd.to_datetime(df["End Date"],format="%m/%d/%Y %H:%M", errors="coerce")
         df["Total Duration (hh:mm:ss)"]=pd.to_datetime(df["Total Duration (hh:mm:ss)"],format="%H:%M:%S")
         df["Charging Time (hh:mm:ss)"]=pd.to_datetime(df["Charging Time (hh:mm:ss)"],format="%H:%M:%S")
+        df['Charging Time (hh:mm:ss)'] = df['Charging Time (hh:mm:ss)'] - dt.datetime(1900, 1, 1, 0, 0, 0)
+        df['Total Duration (hh:mm:ss)'] = df['Total Duration (hh:mm:ss)'] - dt.datetime(1900, 1, 1, 0, 0, 0)
+        df['Charging Time (hh:mm:ss)'] = df['Charging Time (hh:mm:ss)'].round('min')
+        df['Total Duration (hh:mm:ss)'] = df['Total Duration (hh:mm:ss)'].round('min')
     
     def pair(self,df, print=False):
         pairlocation = []

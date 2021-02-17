@@ -3,7 +3,7 @@ import http.client
 
 class MapBoxAPI:
     def __init__(self):
-        self.base_url = "https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/"
+        self.base_url = "https://api.mapbox.com/styles/v1/mapbox/light-v10/static/"
         self.access_token = "pk.eyJ1IjoiYXNnZXJ0YW5nIiwiYSI6ImNra3M0Z25uYjEzNmkydnMxcW91ZTA3djYifQ.4t-EqKfxIzyAo1uHW6232w"
     
     def get_image(self, long, lat, name, size):

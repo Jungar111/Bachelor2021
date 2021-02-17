@@ -1,0 +1,3 @@
+
+class ModelStatistics:
+    pass

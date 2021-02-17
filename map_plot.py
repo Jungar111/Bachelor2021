@@ -7,7 +7,7 @@ import numpy as np
 from MapBoxApi import MapBoxAPI
 from matplotlib.cm import ScalarMappable
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-
+import matplotlib.dates as mdates
 
 c = clean_paloalto()
 data =  c.clean_data()
@@ -56,36 +56,77 @@ for ID in df["ID"].unique():
 
 data = data.merge(df[["ID","mean","time"]], left_on="Pairlocation", right_on ="ID")
 
+def getloc(df):
+        lat = []
+        lon = []
 
-fig, ax = plt.subplots(figsize = (8,7))
-ax.scatter(data.Longitude, data.Latitude, zorder=1, alpha= 0.2, c=data["time"], s=data["mean"]/10)
-ax.set_title('Plotting Spatial Data on Palo Alto Map')
+        pairloc = list(df["Pairlocation"].unique())
+        pairloc = [i.split("x") for i in pairloc]
+
+        for pair in pairloc:
+            lat.append(float(pair[0]))
+            lon.append(float(pair[1]))
+        
+        return lat,lon
+
+lat, lon = getloc(data)
+
+ptime = []
+pmean = []
+pstime = []
+
+for pair in data["Pairlocation"].unique():
+    ptime.append(data["time"][data["Pairlocation"] == pair].unique().tolist())
+    pmean.append(data["mean"][data["Pairlocation"] == pair].unique().tolist())
+    dates = data["Start Date"][data["Pairlocation"] == pair].dt.date
+    pstime.append(dates.unique())
+
+print("HALLO")
+print(type(data["Start Date"][0]))
+
+ptime = flat_list = [item for sublist in ptime for item in sublist]
+
+pmean = flat_list = [item/10 for sublist in pmean for item in sublist]
+
+PSTIME = []
+for pst in pstime:
+    app = min(pst)
+    print(app)
+    PSTIME.append(app)
+
+print(ptime)
+data["Start Date"][data["Pairlocation"] == pair].unique().tolist()
+
+
+
+fig, ax = plt.subplots(figsize = (13,7))
+sc = ax.scatter(lon, lat, zorder=1, alpha= 0.6, c=[mdates.date2num(i) for i in PSTIME])
+ax.set_title('Plotting Spatial/Time Data on Palo Alto Map')
 ax.set_xlim(BBox[0],BBox[1])
 ax.set_ylim(BBox[2],BBox[3])
 
-values = list(np.quantile(data["mean"]/10,[0.125, 0.5, 0.875]))
-values = [np.round(i,2) for i in values]
-l1 = ax.scatter([],[], s=values[0], edgecolors='none', c="grey")
-l2 = ax.scatter([],[], s=values[1], edgecolors='none', c="grey")
-l3 = ax.scatter([],[], s=values[2], edgecolors='none', c="grey")
+# values = list(np.quantile(data["mean"]/10,[0.125, 0.5, 0.875]))
+# values = [np.round(i,2) for i in values]
+# l1 = ax.scatter([],[], s=values[0], edgecolors='none', c="grey")
+# l2 = ax.scatter([],[], s=values[1], edgecolors='none', c="grey")
+# l3 = ax.scatter([],[], s=values[2], edgecolors='none', c="grey")
 
-labels = values
-leg = ax.legend([l1, l2, l3], labels, frameon=True, fontsize=8,
-handlelength=2, loc = 'lower left', borderpad = 1,
-handletextpad=1, title='Mean no. charges', scatterpoints = 1)
+# labels = values
+# leg = ax.legend([l1, l2, l3], labels, frameon=True, fontsize=8,
+# handlelength=2, loc = 'lower left', borderpad = 1,
+# handletextpad=1, title='Mean no. charges', scatterpoints = 1)
 
 
 ax.imshow(paloaltoimg, zorder=0, extent = BBox, aspect= 'equal')
 
-cmap = plt.get_cmap("viridis")
-norm = plt.Normalize(data["time"].min(), data["time"].max())
-sm =  ScalarMappable(norm=norm, cmap=cmap)
-sm.set_array([])
-# divider = make_axes_locatable(ax)
-# cax = divider.append_axes("right", size="5%", pad=0.1)
-cbar = fig.colorbar(sm, ax=ax, shrink=0.6)
-cbar.ax.set_title("Avg. Time (mins)")
 
-plt.savefig("SpacialPlot.png")
+loc = mdates.AutoDateLocator()
+cbar = fig.colorbar(sc, ticks=loc,
+                 format=mdates.AutoDateFormatter(loc),
+                 ax = ax)
+
+cbar.ax.set_title("First use")
+
+plt.savefig("TIMEPLOT.png")
 
 #plt.show()

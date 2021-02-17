@@ -3,6 +3,7 @@ from MapBoxApi import MapBoxAPI
 import matplotlib.pyplot as plt
 import re
 
+
 class analysis:
     def __init__(self):
         self.data = pd.read_csv("points_of_int.csv")
@@ -39,12 +40,13 @@ class clean:
     
 
 if __name__=='__main__':
-    a = analysis()
-    c = clean()
-    data=c.data
+    #a = analysis()
+    #c = clean()
+    #data=c.data
     #c.categories(data)
     #a.sjov(data)
-    print((data["Category"].unique()))
+    #print((data["Category"].unique()))
+    
     
 
 

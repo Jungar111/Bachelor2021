@@ -25,7 +25,7 @@ class POI:
         venue = json.loads(self.data.decode("utf-8"))["response"]["venues"]
         return venue
     
-    def getpd(self,df):
+    def getpd(self):
         # Den bruger da ikke data????
         #lat1,lon1 = self.getloc(df)
         lat1 = [37.450375-0.005*i for i in range(7)]
@@ -48,7 +48,7 @@ class POI:
                             #if venue[i]["categories"][0]["name"] not in notimportant:
                             #cat.append(venue[i]["categories"][0]["name"])
                             cat.append(categories[q]["name"])
-                            subcat.append(categories[q]["categories"]["name"])
+                            subcat.append(venue[i]["categories"][0]["name"])
                             name.append(venue[i]["name"])
                             lat.append(venue[i]["location"]["lat"])
                             lon.append(venue[i]["location"]["lng"])
@@ -77,7 +77,8 @@ if __name__=='__main__':
     data = c.clean_data()
     p = POI()
     #print(p.getloc(data))
-    print(p.getcategory())
-    #points_of_int1 = p.getpd(data)
-    #print(points_of_int1.head)
-    #points_of_int1.to_csv("points_of_int1.csv")
+    #print(p.getcategory())
+    
+    # points_of_int1 = p.getpd(data)
+    # print(points_of_int1.head)
+    # points_of_int1.to_csv("points_of_int1.csv")

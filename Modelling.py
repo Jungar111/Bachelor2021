@@ -38,4 +38,7 @@ if __name__=='__main__':
     p = plot()
     data = c.clean_data()
     #m.lmmodels(data)
-    p.poiplot(data)
+    #p.poiplot(data)
+    #print(data.groupby(["MAC Address","Pairlocation"])["End Date"].max())
+    print(data.groupby(["Currency","Pairlocation"])["Fee"].mean())
+    #print(len(data["Pairlocation"].unique()))

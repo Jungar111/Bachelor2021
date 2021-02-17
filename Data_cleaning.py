@@ -13,8 +13,8 @@ class clean_paloalto:
         # We can drop EVSE ID, since mac address has more obs. 
         self.data=self.pa_data.drop(["Address 2","EVSE ID","County","System S/N","Model Number","Transaction Date (Pacific Time)"],axis=1)
         self.to_date(self.data)
-        self.data["Latitude"]=self.data["Latitude"].round(4)
-        self.data["Longitude"]=self.data["Longitude"].round(4)
+        self.data["Latitude"]=self.data["Latitude"].round(3)
+        self.data["Longitude"]=self.data["Longitude"].round(3)
         self.data["MAC Address"]=self.data["MAC Address"].str.replace(":", "")
         self.to_float(self.data)
         self.data=self.data.dropna()

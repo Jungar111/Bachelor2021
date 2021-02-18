@@ -49,10 +49,9 @@ class clean_paloalto:
         df["Charging Time (hh:mm:ss)"]=pd.to_datetime(df["Charging Time (hh:mm:ss)"],format="%H:%M:%S", errors="coerce")
 
         # Fixing different time zones
-        print(df["Start Date"][df["Start Time Zone"]=="UTC"])
         df["Start Date"][df["Start Time Zone"]=="UTC"]=df["Start Date"][df["Start Time Zone"]=="UTC"]+timedelta(hours=-8)
         df["End Date"][df["End Time Zone"]=="UTC"]=df["End Date"][df["End Time Zone"]=="UTC"]+timedelta(hours=-8)
-        print(df["Start Date"][df["Start Time Zone"]=="UTC"])
+        
 
     def pair(self,df, print=False):
         pairlocation = []
@@ -102,5 +101,5 @@ if __name__=='__main__':
     data = c.clean_data()
     
 
-    print(c.to_date(data))
+    print(data["Energy (kWh)"][data["Start Time Zone"]=="UTC"])
     #print(data.groupby("Start Time Zone").count())

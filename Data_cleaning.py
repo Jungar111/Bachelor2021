@@ -101,9 +101,4 @@ if __name__=='__main__':
     c = clean_paloalto()
     data = c.clean_data()
 
-
     
-    
-
-    print(data["Energy (kWh)"][data["Start Time Zone"]=="UTC"])
-    #print(data.groupby("Start Time Zone").count())

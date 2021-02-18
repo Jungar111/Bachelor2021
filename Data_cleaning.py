@@ -2,6 +2,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+import platform
 import scipy
 import math
 import plotly.express as px
@@ -99,6 +100,9 @@ class clean_paloalto:
 if __name__=='__main__':
     c = clean_paloalto()
     data = c.clean_data()
+
+
+    
     
 
     print(data["Energy (kWh)"][data["Start Time Zone"]=="UTC"])

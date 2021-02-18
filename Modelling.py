@@ -23,11 +23,26 @@ class plot:
         purple_patch = mpatches.Patch(color="Purple", label='Plug type = J1772')
         yellow_patch = mpatches.Patch(color="Yellow", label='Plug type = NEMA 5-20R')
 
-        plt.scatter(df["Charge Duration (mins)"],df["Energy (kWh)"], c=pd.factorize(df["Plug Type"])[0])
-        plt.xlabel("Charge duration (min)")
-        plt.ylabel("Energy (kWh)")
-        plt.title("Energy vs charge duration")
-        plt.legend(handles=[purple_patch,yellow_patch])
+        #plt.scatter(x,y,c=df["Port Type"])
+
+        plt.hexbin(x,y, gridsize=50)
+        #plt.plot(x,Y_pred, c="red")
+        plt.show()
+    
+
+    def lmmodels1(self,df):
+        from sklearn.linear_model import LinearRegression
+        x = df["Charge Duration (mins)"].values.reshape(-1, 1)
+        y =  df["Energy (kWh)"].values.reshape(-1, 1)
+        lm1 = LinearRegression()
+        lm1.fit(x,y) 
+        Y_pred = lm1.predict(x)
+
+        plt.scatter(x,y,c=pd.factorize(df["Port Type"])[0], alpha=0.3)
+        #plt.scatter(x,y)
+
+        #plt.hexbin(x,y, gridsize=50)
+        #plt.plot(x,Y_pred, c="red")
         plt.show()
     
 
@@ -37,8 +52,6 @@ if __name__=='__main__':
     m = modelling()
     p = plot()
     data = c.clean_data()
+    
     #m.lmmodels(data)
-    #p.poiplot(data)
-    #print(data.groupby(["MAC Address","Pairlocation"])["End Date"].max())
-    print(data.groupby(["Currency","Pairlocation"])["Fee"].mean())
-    #print(len(data["Pairlocation"].unique()))
+    m.lmmodels1(data)

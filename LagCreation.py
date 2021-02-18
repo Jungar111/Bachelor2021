@@ -7,7 +7,24 @@ import math
 import plotly.express as px
 from Data_cleaning import clean_paloalto
 
-# class modelling:
+import numpy as np
+import pandas as pd
+import datetime as dt
+import time
+import matplotlib.pyplot as plt
+
+class lags:
+    def YearAndStation(self, df, year, MAC):
+        df['StartYear'] = df['Start Date'].dt.year
+        df_year = df[df['StartYear'] == 2016]
+
+        df_year_station df_year[df_year['']]
+
+
+#   def discretize(self, df): 
+
+
+    
 #     def lmmodels(self,df):
 #         from sklearn.linear_model import LinearRegression
 #         x = df["Charge Duration (mins)"].values.reshape(-1, 1)

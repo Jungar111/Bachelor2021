@@ -5,9 +5,14 @@ import numpy as np
 import scipy
 import math
 import plotly.express as px
+import platform
+from datetime import timedelta
 class clean_paloalto:
     def __init__(self):
-        self.pa_data = pd.read_csv("data\ChargePoint Data CY20Q4.csv")
+        if platform.system() == "Darwin":
+            self.pa_data = pd.read_csv("data/ChargePoint Data CY20Q4.csv")
+        elif platform.system() == "Windows":
+            self.pa_data = pd.read_csv("data\ChargePoint Data CY20Q4.csv")
     
     def clean_data(self):
         # We can drop EVSE ID, since mac address has more obs.
@@ -17,6 +22,7 @@ class clean_paloalto:
         self.data["Latitude"]=self.data["Latitude"].round(3)
         self.data["Longitude"]=self.data["Longitude"].round(3)
         self.data["MAC Address"]=self.data["MAC Address"].str.replace(":", "")
+        self.valuta(self.data)
         #self.to_float(self.data)
         self.data=self.data.dropna()
         self.data.index=range(len(self.data))
@@ -26,6 +32,11 @@ class clean_paloalto:
         self.locationdf(self.data)
         return self.data
 
+    def valuta(self,df):
+        # EUR = 1.1761
+        # MXN = 0.047122
+        df["Fee"][df["Currency"]=="EUR"]=df["Fee"][df["Currency"]=="EUR"]*1.1761
+        df["Fee"][df["Currency"]=="MXN"]=df["Fee"][df["Currency"]=="MXN"]*0.047122
     # def to_float(self,df):
     #     df["Charge Duration (mins)"][df["Charge Duration (mins)"]==" -   "]=0
     #     df["Charge Duration (mins)"]=pd.to_numeric(df["Charge Duration (mins)"],errors='coerce')
@@ -36,7 +47,13 @@ class clean_paloalto:
         df["End Date"]=pd.to_datetime(df["End Date"],format="%m/%d/%Y %H:%M", errors="coerce")
         df["Total Duration (hh:mm:ss)"]=pd.to_datetime(df["Total Duration (hh:mm:ss)"],format="%H:%M:%S", errors="coerce")
         df["Charging Time (hh:mm:ss)"]=pd.to_datetime(df["Charging Time (hh:mm:ss)"],format="%H:%M:%S", errors="coerce")
-    
+
+        # Fixing different time zones
+        print(df["Start Date"][df["Start Time Zone"]=="UTC"])
+        df["Start Date"][df["Start Time Zone"]=="UTC"]=df["Start Date"][df["Start Time Zone"]=="UTC"]+timedelta(hours=-8)
+        df["End Date"][df["End Time Zone"]=="UTC"]=df["End Date"][df["End Time Zone"]=="UTC"]+timedelta(hours=-8)
+        print(df["Start Date"][df["Start Time Zone"]=="UTC"])
+
     def pair(self,df, print=False):
         pairlocation = []
         for index, longitude in enumerate(df["Longitude"]):
@@ -84,4 +101,6 @@ if __name__=='__main__':
     c = clean_paloalto()
     data = c.clean_data()
     
-    print(data.dtypes)
+
+    print(c.to_date(data))
+    #print(data.groupby("Start Time Zone").count())

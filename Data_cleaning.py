@@ -84,4 +84,4 @@ if __name__=='__main__':
     c = clean_paloalto()
     data = c.clean_data()
     
-    print(len(data["Pairlocation"].unique()))
+    print(data.dtypes)

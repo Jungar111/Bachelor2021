@@ -42,13 +42,13 @@ class POI:
         for j in range(len(lat1)):
             for k in range(len(lon1)):
                 for q in range(len(categories)):
-                    venue = self.getvenue(lat1[j],lon1[k],500,1,categories[q]["id"])
+                    venue = self.getvenue(lat1[j],lon1[k],500,50,categories[q]["id"])
                     for i in range(len(venue)):
                         try:
                             #if venue[i]["categories"][0]["name"] not in notimportant:
                             #cat.append(venue[i]["categories"][0]["name"])
-                            cat.append(categories[q]["name"])
                             subcat.append(venue[i]["categories"][0]["name"])
+                            cat.append(categories[q]["name"])
                             name.append(venue[i]["name"])
                             lat.append(venue[i]["location"]["lat"])
                             lon.append(venue[i]["location"]["lng"])
@@ -73,12 +73,12 @@ class POI:
 
 
 if __name__=='__main__':
-    c = clean_paloalto()
-    data = c.clean_data()
+    #c = clean_paloalto()
+    #data = c.clean_data()
     p = POI()
     #print(p.getloc(data))
     #print(p.getcategory())
     
-    # points_of_int1 = p.getpd(data)
-    # print(points_of_int1.head)
-    # points_of_int1.to_csv("points_of_int1.csv")
+    points_of_int1 = p.getpd()
+    print(points_of_int1.head)
+    points_of_int1.to_csv("points_of_int1.csv")

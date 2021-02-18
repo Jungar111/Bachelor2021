@@ -5,12 +5,16 @@ import matplotlib.dates as mdates
 import numpy as np
 import matplotlib.cm as cm
 from matplotlib.colors import Normalize, rgb2hex
+import platform
 
 class foliumMapPlot():
     def __init__(self):
         self.c = clean_paloalto()
         self.data = self.c.clean_data()
-
+        if platform.system() == "Darwin":
+            self.POI = pd.read_csv("points_of_int1.csv")
+        elif platform.system() == "Windows":
+            self.POI = pd.read_csv("points_of_int1.csv")
 
 
 
@@ -24,7 +28,7 @@ class foliumMapPlot():
             print(date)
             for charger in self.data["Pairlocation"].unique():
                 amount = self.data[(self.data["Start Date"].dt.month == date) & (self.data["Pairlocation"] == charger)].shape[0]
-                time = self.data["Charge Duration (mins)"][(self.data["Start Date"].dt.month == date) & (self.data["Pairlocation"] == charger)].mean()
+                time = self.data["Charging Time (hh:mm:ss)"][(self.data["Start Date"].dt.month == date) & (self.data["Pairlocation"] == charger)].mean()
                 ID.append(charger)
                 Date.append(date)
                 Amount.append(amount)
@@ -84,32 +88,54 @@ class foliumMapPlot():
             
             return lat,lon
 
-    def create_HTML(self, name,ptime, pmean):
-        HTML = f"<h3>Name: {name}</h3> \n <h4>Mean charge time:</h4> <p>{ptime} </p> \n <h4> Mean kWh charged:</h4> <p>{pmean}</p>"
+    def create_HTML(self, name,ptime, pmean, maddres, plug, mindate,maxdate):
+        HTML = f"<h5>MAC Adress: {maddres}</h5> \n <h6>Name:</h6> <p>{name}</p> \n <h6>Mean charge time:</h6> <p>{ptime}</p> \n <h6> Mean kWh charged:</h6> <p>{pmean}</p>"
+        HTML += f"\n <h6>Plug Type:</h6> <p>{plug}</p> \n <h6>First Use:</h6> <p>{mindate}</p> \n <h6>Last Use:</h6> <p>{maxdate}</p>"
+
+        return HTML
+    
+    def create_POI_HTML(self, name, cat, subcat):
+        HTML = f"<h5>Name: {name}</h5> \n <h6>Category:</h6> <p>{cat}</p> \n <h6>Subcategory:</h6> <p>{subcat}</p> \n"
 
         return HTML
 
 
     def foliumplot(self):
+        m = folium.Map(location=[37.435, -122.16], tiles="Stamen Toner", zoom_start=13)
+        groups = self.POI.Category.unique().tolist()
+        colors = ['red','blue','gray','orange','beige','green','purple','pink','cadetblue','black']
+        cols = dict(zip(groups,colors))
+
+        for index, poi in self.POI.iterrows():
+            folium.Circle(
+                radius=15,
+                location=[poi.Latitude, poi.Longitude],
+                popup=self.create_POI_HTML(poi.Name, poi.Category, poi["Sub Category"]),
+                color=cols[poi.Category],
+                fill=False,
+            ).add_to(m)
+
         lat, lon = self.getloc(self.data)
         ptime, pmean, PSTIME = self.createdf()
         col = [mdates.date2num(i) for i in PSTIME]
         cmap = cm.autumn
         norm = Normalize(vmin=min(col), vmax=max(col))
-        m = folium.Map(location=[37.435, -122.16], tiles="Stamen Toner", zoom_start=13)
         
         for i in range(len(lat)):
             dat = self.data[(self.data["Latitude"] == lat[i]) & (self.data["Longitude"] == lon[i])]
+            first_use = dat["Start Date"].min()
+            last_use = dat["End Date"].min()
             folium.Circle(
-                radius=np.round(pmean[i],2)/5,
+                radius=np.round(pmean[i],2),
                 location=[lat[i], lon[i]],
-                popup=self.create_HTML(dat["Station Name"].unique()[0], np.round(ptime[i],2), np.round(pmean[i],2)),
+                popup=self.create_HTML(dat["Station Name"].unique()[0], ptime[i], np.round(pmean[i],2), dat["MAC Address"].unique()[0], dat["Plug Type"].unique()[0], first_use, last_use),
                 color=rgb2hex(cmap(norm(col[i]))),
                 fill=True,
             ).add_to(m)
+            
+        
 
-
-        m.save("test.html")
+        m.save("folium.html")
 
 if __name__ == '__main__':
     p = foliumMapPlot()

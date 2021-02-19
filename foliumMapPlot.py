@@ -101,20 +101,21 @@ class foliumMapPlot():
         return HTML
 
 
-    def foliumplot(self):
+    def foliumplot(self, POI = True, Clusters = True):
         m = folium.Map(location=[37.435, -122.16], tiles="Stamen Toner", zoom_start=13)
-        groups = self.POI.Category.unique().tolist()
-        colors = ['red','blue','gray','orange','beige','green','purple','pink','cadetblue','black']
-        cols = dict(zip(groups,colors))
+        if POI:
+            groups = self.POI.Category.unique().tolist()
+            colors = ['red','blue','gray','orange','beige','green','purple','pink','cadetblue','black']
+            cols = dict(zip(groups,colors))
 
-        for index, poi in self.POI.iterrows():
-            folium.Circle(
-                radius=15,
-                location=[poi.Latitude, poi.Longitude],
-                popup=self.create_POI_HTML(poi.Name, poi.Category, poi["Sub Category"]),
-                color=cols[poi.Category],
-                fill=False,
-            ).add_to(m)
+            for index, poi in self.POI.iterrows():
+                folium.Circle(
+                    radius=15,
+                    location=[poi.Latitude, poi.Longitude],
+                    popup=self.create_POI_HTML(poi.Name, poi.Category, poi["Sub Category"]),
+                    color=cols[poi.Category],
+                    fill=False,
+                ).add_to(m)
 
         lat, lon = self.getloc(self.data)
         ptime, pmean, PSTIME = self.createdf()
@@ -126,7 +127,18 @@ class foliumMapPlot():
             dat = self.data[(self.data["Latitude"] == lat[i]) & (self.data["Longitude"] == lon[i])]
             first_use = dat["Start Date"].min()
             last_use = dat["End Date"].min()
-            folium.Circle(
+            
+
+            if Clusters:
+                folium.Circle(
+                    radius=np.round(pmean[i],2),
+                    location=[lat[i], lon[i]],
+                    popup=self.create_HTML(dat["Station Name"].unique()[0], ptime[i], np.round(pmean[i],2), dat["MAC Address"].unique()[0], dat["Plug Type"].unique()[0], first_use, last_use),
+                    #color=rgb2hex(cmap(norm(col[i]))),
+                    fill=True,
+                ).add_to(m)
+            else:
+                folium.Circle(
                 radius=np.round(pmean[i],2),
                 location=[lat[i], lon[i]],
                 popup=self.create_HTML(dat["Station Name"].unique()[0], ptime[i], np.round(pmean[i],2), dat["MAC Address"].unique()[0], dat["Plug Type"].unique()[0], first_use, last_use),
@@ -134,11 +146,22 @@ class foliumMapPlot():
                 fill=True,
             ).add_to(m)
             
-        
+        if Clusters:
+            g = gridmap()
+            clusters = list(g.grid(self.data,8))
+            
+            for c in clusters:
+                folium.Circle(
+                    radius=30,
+                    location=[c[0], c[1]],
+                    #popup=self.create_HTML(dat["Station Name"].unique()[0], ptime[i], np.round(pmean[i],2), dat["MAC Address"].unique()[0], dat["Plug Type"].unique()[0], first_use, last_use),
+                    color='red',
+                    fill=True,
+                ).add_to(m)
 
-        m.save("folium.html")
+        m.save("Clusters.html")
 
 if __name__ == '__main__':
     p = foliumMapPlot()
-    p.foliumplot()
-    g = gridmap()
+    p.foliumplot(False, True)
+

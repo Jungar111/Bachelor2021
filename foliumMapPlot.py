@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.cm as cm
 from matplotlib.colors import Normalize, rgb2hex
 import platform
+from grid import gridmap
 
 class foliumMapPlot():
     def __init__(self):
@@ -140,3 +141,4 @@ class foliumMapPlot():
 if __name__ == '__main__':
     p = foliumMapPlot()
     p.foliumplot()
+    g = gridmap()

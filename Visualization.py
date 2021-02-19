@@ -68,7 +68,6 @@ class viz:
         
         dfdate = pd.DataFrame(np.transpose([df1["Pairlocation"].unique(),first_use,last_use]))
         dfdate.columns =['Pairlocation',"First use by location", 'Last use by location']
-<<<<<<< HEAD
         dfdate["Online time"] =  dfdate['Last use by location']-dfdate['First use by location']
         dfdate = dfdate.sort_values(by = "Online time")
 
@@ -84,7 +83,6 @@ class viz:
 
         fig = px.timeline(dfmerge, x_start="First use by location", x_end="Last use by location", y="MAC Address", color="Pairlocation")
         fig.show()
-=======
         dfdate["Online time"] =  dfdate["First use by location"]-dfdate["Last use by location"]
         #dfdate = dfdate.sort_values(by = "Online time")
         
@@ -105,7 +103,6 @@ class viz:
         # dfdate2 = pd.DataFrame(np.transpose([df1["MAC Address"].unique(),first_use2,last_use2]))
         # dfdate2.columns =['MAC Address',"First use by MAC", 'Last use by MAC']
         # dfdate2["Online time"] =  dfdate2["Last use by MAC"]-dfdate2["First use by MAC"]
->>>>>>> Modelling
 
 
         dfclean = df
@@ -141,11 +138,14 @@ class viz:
 
         # df["Start Date"][df["Start Date"].dt.year==2016] insert for given 
         # Clearly see weekend lows 
+    
+
 
 if __name__=='__main__':
     c = clean_paloalto()
     data = c.clean_data()
     v = viz()
-    v.by_dateplot(data)
+    #v.by_dateplot(data)
+    
     
     

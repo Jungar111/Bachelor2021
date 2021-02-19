@@ -3,6 +3,7 @@ import pandas as pd
 import platform
 import time
 import matplotlib.pyplot as plt
+import datetime as dt
 
 class LagCreation:
     def __init__(self):
@@ -14,15 +15,23 @@ class LagCreation:
         data = self.data.resample('2H', on='Start Date').agg(({'Energy (kWh)':'sum','Charge Duration (mins)':'sum', 'Fee':'sum'}))
         return data
     
-    
+
+    def createNew(self, df):
+        
+        dftemp2 = pd.DataFrame(df.iloc[-1]).T
+        dftemp2['ChargeMin'] = dt.timedelta(hours=2)
+        dftemp2['TimeLeftCharge'] = dftemp2['TimeLeftCharge'] - dt.timedelta(hours=2)
+
 
 if __name__ == "__main__":
     l = LagCreation()
     start = time.time()
+    l.data[["Start Date", "Park Duration (mins)", "Charge Duration (mins)", "Energy (kWh)"]].head(20).to_csv("clean.csv")
     data = l.bucket()
-    print(data)
-    plt.bar(data.groupby(data.index.hour).sum().index,data.groupby(data.index.hour).sum()["Energy (kWh)"])
-    plt.show()
+    data.head(10).to_csv("res.csv")
+
+    # plt.bar(data.groupby(data.index.hour).sum().index,data.groupby(data.index.hour).sum()["Energy (kWh)"])
+    # plt.show()
 
     end = time.time()
     print(end - start)

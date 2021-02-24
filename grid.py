@@ -21,9 +21,9 @@ class gridmap:
         clusters=kmeans.cluster_centers_
         label = kmeans.labels_
         
-        griddf = self.data[["Start Date","Port Type","Latitude","Longitude","Fee","Pairlocation"]]
+        griddf = self.data
         griddf["Label"]=label
-        # griddf.columns= ["Start Date","Port Type","Latitude","Longitude","Fee","Pairlocation","Label"]
+        
         return griddf
 
 class plot:

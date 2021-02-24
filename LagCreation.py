@@ -1,66 +1,43 @@
+import platform
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy
-import math
-import plotly.express as px
-from Data_cleaning import clean_paloalto
-
-import numpy as np
-import pandas as pd
-import datetime as dt
-import time
-import matplotlib.pyplot as plt
-
 class lags:
-    def YearAndStation(self, df, year, MAC):
-        df['StartYear'] = df['Start Date'].dt.year
-        df_year = df[df['StartYear'] == 2016]
+    def __init__(self):
+        if platform.system() == "Darwin":
+            self.data = pd.read_csv("TimeBuckets.csv")
+        elif platform.system() == "Windows":
+            self.data = pd.read_csv("TimeBuckets.csv")
 
-        df_year_station df_year[df_year['']]
+    def buildLaggedFeatures(self, s, columns, lag=5,dropna=True):
+        '''
+        From http://stackoverflow.com/questions/20410312/how-to-create-a-lagged-data-structure-using-pandas-dataframe
+        Builds a new DataFrame to facilitate regressing over all possible lagged features
+        '''
 
+        if type(s) is pd.DataFrame:
+            new_dict={}
+            for c in s.columns:
+                new_dict[c]=s[c]
+            for col_name in columns:
+                new_dict[col_name]=s[col_name]
+                # create lagged Series
+                for l in range(1,lag+1):
+                    new_dict['%s_lag%d' %(col_name,l)]=s[col_name].shift(l)
+            res=pd.DataFrame(new_dict,index=s.index)
 
-#   def discretize(self, df): 
+        elif type(s) is pd.Series:
+            the_range=range(lag+1)
+            res=pd.concat([s.shift(i) for i in the_range],axis=1)
+            res.columns=['lag_%d' %i for i in the_range]
+        else:
+            print('Only works for DataFrame or Series')
+            return None
+        if dropna:
+            return res.dropna()
+        else:
+            return res 
 
-
-    
-#     def lmmodels(self,df):
-#         from sklearn.linear_model import LinearRegression
-#         x = df["Charge Duration (mins)"].values.reshape(-1, 1)
-#         y =  df["Energy (kWh)"].values.reshape(-1, 1)
-#         lm1 = LinearRegression()
-#         lm1.fit(x,y) 
-#         Y_pred = lm1.predict(x)
-
-#         #plt.scatter(x,y,c=df["Port Type"])
-
-#         plt.hexbin(x,y, gridsize=50)
-#         #plt.plot(x,Y_pred, c="red")
-#         plt.show()
-    
-
-#     def lmmodels1(self,df):
-#         from sklearn.linear_model import LinearRegression
-#         x = df["Charge Duration (mins)"].values.reshape(-1, 1)
-#         y =  df["Energy (kWh)"].values.reshape(-1, 1)
-#         lm1 = LinearRegression()
-#         lm1.fit(x,y) 
-#         Y_pred = lm1.predict(x)
-
-#         plt.scatter(x,y,c=pd.factorize(df["Port Type"])[0], alpha=0.3)
-#         #plt.scatter(x,y)
-
-#         #plt.hexbin(x,y, gridsize=50)
-#         #plt.plot(x,Y_pred, c="red")
-#         plt.show()
-    
-
-
-if __name__=='__main__':
-    c = clean_paloalto()
-#    m = modelling()
-    data = c.clean_data()
-    print(data.head())
-    #m.lmmodels(data)
-#    m.lmmodels1(data)
+if __name__ == '__main__':
+    l = lags()
+    data = l.data[["Start Date", "Total Duration (hh:mm:ss)", "Charging Time (hh:mm:ss)"]]
+    lagsData = l.buildLaggedFeatures(data, data.columns)
+    print(lagsData.head(10))

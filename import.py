@@ -1,2 +1,0 @@
-def importer(url):
-    pass

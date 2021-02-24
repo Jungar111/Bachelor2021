@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_587a89fc18e4495fb28403d604a36d90 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>    
+    
+            <div class="folium-map" id="map_587a89fc18e4495fb28403d604a36d90" ></div>
+        
+</body>
+<script>    
+    
+            var map_587a89fc18e4495fb28403d604a36d90 = L.map(
+                "map_587a89fc18e4495fb28403d604a36d90",
+                {
+                    center: [37.435, -122.16],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 13,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_59dec883c7704f54a91362a92e42c354 = L.tileLayer(
+                "https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png",
+                {"attribution": "Map tiles by \u003ca href=\"http://stamen.com\"\u003eStamen Design\u003c/a\u003e, under \u003ca href=\"http://creativecommons.org/licenses/by/3.0\"\u003eCC BY 3.0\u003c/a\u003e. Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+            var circle_e86d64b4ffc44af4863c881980c28b02 = L.circle(
+                [37.445, -122.16],
+                {"bubblingMouseEvents": true, "color": "#ff0000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 28.6, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_1a109fae35934dd680e03eabf81c89ed = L.popup({"maxWidth": "100%"});
+
+        
+            var html_cf23404bb79d4bdfbd335ddb686bb644 = $(`<div id="html_cf23404bb79d4bdfbd335ddb686bb644" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 000D6F00015A9D76</h4>   <h6>Name:</h6> <p>PALO ALTO CA / HAMILTON #1 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 02:01:44.633796352 </p>   <h6> Mean kWh charged:</h6> <p>143.0</p>    <h6>First Use:</h6> <p>2011-07-29 20:17:00 </p>    <h6>Last Use:</h6> <p>2020-11-04 04:54:00 </p></div>`)[0];
+            popup_1a109fae35934dd680e03eabf81c89ed.setContent(html_cf23404bb79d4bdfbd335ddb686bb644);
+        
+
+        circle_e86d64b4ffc44af4863c881980c28b02.bindPopup(popup_1a109fae35934dd680e03eabf81c89ed)
+        ;
+
+        
+    
+    
+            var circle_3d0018adf77f4546bacaa67029a126fc = L.circle(
+                [37.444, -122.163],
+                {"bubblingMouseEvents": true, "color": "#ff0200", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff0200", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 26.068, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_15ac283be62c441d830b2b3e66f1027e = L.popup({"maxWidth": "100%"});
+
+        
+            var html_9db52ccd5baa41ddaa2342c4b85bd52c = $(`<div id="html_9db52ccd5baa41ddaa2342c4b85bd52c" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 000D6F0000A20F47</h4>   <h6>Name:</h6> <p>PALO ALTO CA / HIGH #4 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 01:59:09.914272 </p>   <h6> Mean kWh charged:</h6> <p>130.34166666666667</p>    <h6>First Use:</h6> <p>2011-09-04 17:43:00 </p>    <h6>Last Use:</h6> <p>2017-12-02 14:05:00 </p></div>`)[0];
+            popup_15ac283be62c441d830b2b3e66f1027e.setContent(html_9db52ccd5baa41ddaa2342c4b85bd52c);
+        
+
+        circle_3d0018adf77f4546bacaa67029a126fc.bindPopup(popup_15ac283be62c441d830b2b3e66f1027e)
+        ;
+
+        
+    
+    
+            var circle_fc8202f6ec8e4cd895850f33d6c6908d = L.circle(
+                [37.446, -122.162],
+                {"bubblingMouseEvents": true, "color": "#ff0500", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff0500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 0.27, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_3905ba36b5ad44279f0c8ee0b221ec47 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_a96dd81563cd424cb3a6c2e5800ec5ef = $(`<div id="html_a96dd81563cd424cb3a6c2e5800ec5ef" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 000D6F0000A2108E</h4>   <h6>Name:</h6> <p>PALO ALTO CA / BRYANT #2 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 02:00:54.512492800 </p>   <h6> Mean kWh charged:</h6> <p>1.35</p>    <h6>First Use:</h6> <p>2011-10-10 15:23:00 </p>    <h6>Last Use:</h6> <p>2011-12-21 12:26:00 </p></div>`)[0];
+            popup_3905ba36b5ad44279f0c8ee0b221ec47.setContent(html_a96dd81563cd424cb3a6c2e5800ec5ef);
+        
+
+        circle_fc8202f6ec8e4cd895850f33d6c6908d.bindPopup(popup_3905ba36b5ad44279f0c8ee0b221ec47)
+        ;
+
+        
+    
+    
+            var circle_c758054e7ae6489eb9dcb63412e877f9 = L.circle(
+                [37.447, -122.162],
+                {"bubblingMouseEvents": true, "color": "#ff0a00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff0a00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 74.03999999999999, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_2da95389f8764a2ea66fce95ac0726f6 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_e19409adedf4438e822774f414f005b0 = $(`<div id="html_e19409adedf4438e822774f414f005b0" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 000D6F0000A2108E</h4>   <h6>Name:</h6> <p>PALO ALTO CA / BRYANT #2 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 02:02:00.254706944 </p>   <h6> Mean kWh charged:</h6> <p>370.2</p>    <h6>First Use:</h6> <p>2011-12-22 10:03:00 </p>    <h6>Last Use:</h6> <p>2020-12-31 10:12:00 </p></div>`)[0];
+            popup_2da95389f8764a2ea66fce95ac0726f6.setContent(html_e19409adedf4438e822774f414f005b0);
+        
+
+        circle_c758054e7ae6489eb9dcb63412e877f9.bindPopup(popup_2da95389f8764a2ea66fce95ac0726f6)
+        ;
+
+        
+    
+    
+            var circle_8cb3af5efce54490ad98106d8bf81b68 = L.circle(
+                [37.444, -122.16],
+                {"bubblingMouseEvents": true, "color": "#ff1300", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff1300", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 31.895999999999997, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_34cbc5c000104e11a36481b3d7c607e4 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_968b06c22ba748babce3a1f751d9eb12 = $(`<div id="html_968b06c22ba748babce3a1f751d9eb12" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 000D6F00015A9D76</h4>   <h6>Name:</h6> <p>PALO ALTO CA / HAMILTON #1 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 02:03:26.250865920 </p>   <h6> Mean kWh charged:</h6> <p>159.475</p>    <h6>First Use:</h6> <p>2012-04-11 08:36:00 </p>    <h6>Last Use:</h6> <p>2020-11-03 18:03:00 </p></div>`)[0];
+            popup_34cbc5c000104e11a36481b3d7c607e4.setContent(html_968b06c22ba748babce3a1f751d9eb12);
+        
+
+        circle_8cb3af5efce54490ad98106d8bf81b68.bindPopup(popup_34cbc5c000104e11a36481b3d7c607e4)
+        ;
+
+        
+    
+    
+            var circle_e27c9e98d7084d78b76bc6917cdd5bdd = L.circle(
+                [37.422, -122.114],
+                {"bubblingMouseEvents": true, "color": "#ff5600", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff5600", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.65, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_95bddfb606ee4d84aa8fc8ab33202f14 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_96ce38b52ff347cd82386a7f24da6abc = $(`<div id="html_96ce38b52ff347cd82386a7f24da6abc" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 000D6F000154FB5F</h4>   <h6>Name:</h6> <p>PALO ALTO CA / MPL #4 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 01:54:15.847032832 </p>   <h6> Mean kWh charged:</h6> <p>63.25</p>    <h6>First Use:</h6> <p>2014-09-24 08:26:00 </p>    <h6>Last Use:</h6> <p>2020-12-31 17:28:00 </p></div>`)[0];
+            popup_95bddfb606ee4d84aa8fc8ab33202f14.setContent(html_96ce38b52ff347cd82386a7f24da6abc);
+        
+
+        circle_e27c9e98d7084d78b76bc6917cdd5bdd.bindPopup(popup_95bddfb606ee4d84aa8fc8ab33202f14)
+        ;
+
+        
+    
+    
+            var circle_222d20f9bbc94fa5a764a9a40f8d2532 = L.circle(
+                [37.422, -122.113],
+                {"bubblingMouseEvents": true, "color": "#ff5600", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff5600", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30.992, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_5ac08197b76345638b7c984ced9f72e5 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_a6d5907e3c05410bbb2ae1ade9223b67 = $(`<div id="html_a6d5907e3c05410bbb2ae1ade9223b67" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 000D6F00015B7509</h4>   <h6>Name:</h6> <p>PALO ALTO CA / MPL #6 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 01:53:11.621014528 </p>   <h6> Mean kWh charged:</h6> <p>154.95833333333331</p>    <h6>First Use:</h6> <p>2014-09-24 08:36:00 </p>    <h6>Last Use:</h6> <p>2020-12-31 14:51:00 </p></div>`)[0];
+            popup_5ac08197b76345638b7c984ced9f72e5.setContent(html_a6d5907e3c05410bbb2ae1ade9223b67);
+        
+
+        circle_222d20f9bbc94fa5a764a9a40f8d2532.bindPopup(popup_5ac08197b76345638b7c984ced9f72e5)
+        ;
+
+        
+    
+    
+            var circle_40e6ba123b394af1b05587bf58d9e6c7 = L.circle(
+                [37.422, -122.112],
+                {"bubblingMouseEvents": true, "color": "#ff5600", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff5600", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2.524, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_dcc51b1b78d344ddb6919562ca3dd339 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_1d4f67c3b8ab42d19ab400381b6ee25b = $(`<div id="html_1d4f67c3b8ab42d19ab400381b6ee25b" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 000D6F000154EF9A</h4>   <h6>Name:</h6> <p>PALO ALTO CA / MPL #2 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 02:05:04.641686528 </p>   <h6> Mean kWh charged:</h6> <p>12.625</p>    <h6>First Use:</h6> <p>2014-09-24 08:42:00 </p>    <h6>Last Use:</h6> <p>2020-11-21 14:54:00 </p></div>`)[0];
+            popup_dcc51b1b78d344ddb6919562ca3dd339.setContent(html_1d4f67c3b8ab42d19ab400381b6ee25b);
+        
+
+        circle_40e6ba123b394af1b05587bf58d9e6c7.bindPopup(popup_dcc51b1b78d344ddb6919562ca3dd339)
+        ;
+
+        
+    
+    
+            var circle_720baa0210d349979b49c69b3c81787d = L.circle(
+                [37.445, -122.139],
+                {"bubblingMouseEvents": true, "color": "#ff5d00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff5d00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 29.776, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_60e39f53e084406a9dc948392df6bb35 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_ec8f89bc17554cb1b355bd51f05b70cd = $(`<div id="html_ec8f89bc17554cb1b355bd51f05b70cd" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 000D6F00009ED727</h4>   <h6>Name:</h6> <p>PALO ALTO CA / RINCONADA LIB 2 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 02:01:51.728573184 </p>   <h6> Mean kWh charged:</h6> <p>148.875</p>    <h6>First Use:</h6> <p>2015-01-02 08:43:00 </p>    <h6>Last Use:</h6> <p>2020-07-05 13:17:00 </p></div>`)[0];
+            popup_60e39f53e084406a9dc948392df6bb35.setContent(html_ec8f89bc17554cb1b355bd51f05b70cd);
+        
+
+        circle_720baa0210d349979b49c69b3c81787d.bindPopup(popup_60e39f53e084406a9dc948392df6bb35)
+        ;
+
+        
+    
+    
+            var circle_cd5e2a23e3dd4bf0a2387d3c0be40305 = L.circle(
+                [37.449, -122.158],
+                {"bubblingMouseEvents": true, "color": "#ff6d00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff6d00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.148, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_c7d6423adfce4683ba81a19da1fa31c8 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_8251a472cc304f3bb3bdb0f3290e9a4b = $(`<div id="html_8251a472cc304f3bb3bdb0f3290e9a4b" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 0024B10000021146</h4>   <h6>Name:</h6> <p>PALO ALTO CA / WEBSTER #1 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 02:05:04.680855808 </p>   <h6> Mean kWh charged:</h6> <p>40.74166666666667</p>    <h6>First Use:</h6> <p>2015-07-29 13:59:00 </p>    <h6>Last Use:</h6> <p>2017-06-13 10:17:00 </p></div>`)[0];
+            popup_c7d6423adfce4683ba81a19da1fa31c8.setContent(html_8251a472cc304f3bb3bdb0f3290e9a4b);
+        
+
+        circle_cd5e2a23e3dd4bf0a2387d3c0be40305.bindPopup(popup_c7d6423adfce4683ba81a19da1fa31c8)
+        ;
+
+        
+    
+    
+            var circle_33a5f443b93d4ec493268f22e9821fef = L.circle(
+                [37.448, -122.158],
+                {"bubblingMouseEvents": true, "color": "#ff6e00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff6e00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 52.348, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_3b22d1fac4cc4cc8b98cdb37d471fa48 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6157e3926d6640ce9e4186552c31623f = $(`<div id="html_6157e3926d6640ce9e4186552c31623f" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 0024B10000021146</h4>   <h6>Name:</h6> <p>PALO ALTO CA / WEBSTER #1 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 02:08:22.622239744 </p>   <h6> Mean kWh charged:</h6> <p>261.7416666666667</p>    <h6>First Use:</h6> <p>2015-08-21 12:43:00 </p>    <h6>Last Use:</h6> <p>2020-12-31 17:49:00 </p></div>`)[0];
+            popup_3b22d1fac4cc4cc8b98cdb37d471fa48.setContent(html_6157e3926d6640ce9e4186552c31623f);
+        
+
+        circle_33a5f443b93d4ec493268f22e9821fef.bindPopup(popup_3b22d1fac4cc4cc8b98cdb37d471fa48)
+        ;
+
+        
+    
+    
+            var circle_de46af184f3842c7a00330acb6febf74 = L.circle(
+                [37.427, -122.146],
+                {"bubblingMouseEvents": true, "color": "#ff7900", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff7900", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2.3920000000000003, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_b08eebe36cea469783bfd4ae92fa3d6b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_5fa2389d4c274faaa6156e3badf05d37 = $(`<div id="html_5fa2389d4c274faaa6156e3badf05d37" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 0024B10000021329</h4>   <h6>Name:</h6> <p>PALO ALTO CA / CAMBRIDGE #1 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 01:55:33.849947648 </p>   <h6> Mean kWh charged:</h6> <p>11.958333333333332</p>    <h6>First Use:</h6> <p>2016-01-14 11:19:00 </p>    <h6>Last Use:</h6> <p>2016-05-03 05:28:00 </p></div>`)[0];
+            popup_b08eebe36cea469783bfd4ae92fa3d6b.setContent(html_5fa2389d4c274faaa6156e3badf05d37);
+        
+
+        circle_de46af184f3842c7a00330acb6febf74.bindPopup(popup_b08eebe36cea469783bfd4ae92fa3d6b)
+        ;
+
+        
+    
+    
+            var circle_42e6d36ce10f40d4b818e2e1c33a7afe = L.circle(
+                [37.428, -122.144],
+                {"bubblingMouseEvents": true, "color": "#ff7900", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff7900", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 16.022, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_2fcb5c3563284fcaa56a8e7db7ad1690 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_1c0a1cd0434c4507845ab7b1eb7544ea = $(`<div id="html_1c0a1cd0434c4507845ab7b1eb7544ea" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 0024B10000021323</h4>   <h6>Name:</h6> <p>PALO ALTO CA / TED THOMPSON #1 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 02:13:05.732410624 </p>   <h6> Mean kWh charged:</h6> <p>80.10833333333333</p>    <h6>First Use:</h6> <p>2016-01-15 05:40:00 </p>    <h6>Last Use:</h6> <p>2020-10-11 10:06:00 </p></div>`)[0];
+            popup_2fcb5c3563284fcaa56a8e7db7ad1690.setContent(html_1c0a1cd0434c4507845ab7b1eb7544ea);
+        
+
+        circle_42e6d36ce10f40d4b818e2e1c33a7afe.bindPopup(popup_2fcb5c3563284fcaa56a8e7db7ad1690)
+        ;
+
+        
+    
+    
+            var circle_0c2fd6a43403487998a0625f590aef54 = L.circle(
+                [37.426, -122.146],
+                {"bubblingMouseEvents": true, "color": "#ff8200", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff8200", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 50.298, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_0ce90501b2b74ff2a521ab8847de2bbe = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7eb5927ad58c4d589177d0b1ced0ca58 = $(`<div id="html_7eb5927ad58c4d589177d0b1ced0ca58" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 0024B10000021329</h4>   <h6>Name:</h6> <p>PALO ALTO CA / CAMBRIDGE #1 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 01:45:08.021513472 </p>   <h6> Mean kWh charged:</h6> <p>251.49166666666665</p>    <h6>First Use:</h6> <p>2016-05-02 15:43:00 </p>    <h6>Last Use:</h6> <p>2020-12-31 18:19:00 </p></div>`)[0];
+            popup_0ce90501b2b74ff2a521ab8847de2bbe.setContent(html_7eb5927ad58c4d589177d0b1ced0ca58);
+        
+
+        circle_0c2fd6a43403487998a0625f590aef54.bindPopup(popup_0ce90501b2b74ff2a521ab8847de2bbe)
+        ;
+
+        
+    
+    
+            var circle_a1401b4a1f20428f8d43d5d917016243 = L.circle(
+                [37.443, -122.163],
+                {"bubblingMouseEvents": true, "color": "#ff9400", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ff9400", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 38.227999999999994, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_632d2537fbc14f4a914aa3fda16e181c = L.popup({"maxWidth": "100%"});
+
+        
+            var html_ff9e6b6f9b31415a97fa8b525dc79c88 = $(`<div id="html_ff9e6b6f9b31415a97fa8b525dc79c88" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 0024B10000025959</h4>   <h6>Name:</h6> <p>PALO ALTO CA / HIGH #2 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 01:52:47.387297792 </p>   <h6> Mean kWh charged:</h6> <p>191.14166666666668</p>    <h6>First Use:</h6> <p>2017-01-06 14:53:00 </p>    <h6>Last Use:</h6> <p>2020-12-31 09:37:00 </p></div>`)[0];
+            popup_632d2537fbc14f4a914aa3fda16e181c.setContent(html_ff9e6b6f9b31415a97fa8b525dc79c88);
+        
+
+        circle_a1401b4a1f20428f8d43d5d917016243.bindPopup(popup_632d2537fbc14f4a914aa3fda16e181c)
+        ;
+
+        
+    
+    
+            var circle_e7555c9cd3b94483876b0e2531a78c53 = L.circle(
+                [37.429, -122.144],
+                {"bubblingMouseEvents": true, "color": "#ffb500", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ffb500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.416, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_d8ca3a09e1994ba780570372ba93e724 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_842f718a23994f39a45c9f38526dc65d = $(`<div id="html_842f718a23994f39a45c9f38526dc65d" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 0024B10000029BE4</h4>   <h6>Name:</h6> <p>PALO ALTO CA / TED THOMPSON #4 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 02:14:32.100724736 </p>   <h6> Mean kWh charged:</h6> <p>57.075</p>    <h6>First Use:</h6> <p>2018-03-21 08:15:00 </p>    <h6>Last Use:</h6> <p>2020-12-31 16:39:00 </p></div>`)[0];
+            popup_d8ca3a09e1994ba780570372ba93e724.setContent(html_842f718a23994f39a45c9f38526dc65d);
+        
+
+        circle_e7555c9cd3b94483876b0e2531a78c53.bindPopup(popup_d8ca3a09e1994ba780570372ba93e724)
+        ;
+
+        
+    
+    
+            var circle_91d24bf6e29443da9c0ef094cf7e64ed = L.circle(
+                [37.427, -122.143],
+                {"bubblingMouseEvents": true, "color": "#ffff00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ffff00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 0.054000000000000006, "stroke": true, "weight": 3}
+            ).addTo(map_587a89fc18e4495fb28403d604a36d90);
+        
+    
+        var popup_754cdbfd26c949a39d4270b225021117 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_e350e8fc06be4cfe86748945081de056 = $(`<div id="html_e350e8fc06be4cfe86748945081de056" style="width: 100.0%; height: 100.0%;"><h4>MAC Address: 0024B1000003769F</h4>   <h6>Name:</h6> <p>PALO ALTO CA / SHERMAN 7 </p>   <h6>Mean charge time:</h6> <p>1900-01-01 02:38:22.281249792 </p>   <h6> Mean kWh charged:</h6> <p>0.26666666666666666</p>    <h6>First Use:</h6> <p>2020-12-11 14:14:00 </p>    <h6>Last Use:</h6> <p>2020-12-31 14:43:00 </p></div>`)[0];
+            popup_754cdbfd26c949a39d4270b225021117.setContent(html_e350e8fc06be4cfe86748945081de056);
+        
+
+        circle_91d24bf6e29443da9c0ef094cf7e64ed.bindPopup(popup_754cdbfd26c949a39d4270b225021117)
+        ;
+
+        
+    
+</script>

@@ -38,9 +38,14 @@ class clean_paloalto:
         # MXN = 0.047122
         df["Fee"][df["Currency"]=="EUR"]=df["Fee"][df["Currency"]=="EUR"]*1.1761
         df["Fee"][df["Currency"]=="MXN"]=df["Fee"][df["Currency"]=="MXN"]*0.047122
-    # def to_float(self,df):
-    #     df["Charge Duration (mins)"][df["Charge Duration (mins)"]==" -   "]=0
-    #     df["Charge Duration (mins)"]=pd.to_numeric(df["Charge Duration (mins)"],errors='coerce')
+
+    def to_float(self,df):
+        df["Charging Time (hh:mm:ss)"][df["Charging Time (hh:mm:ss)"]==" -   "]=0
+        df["Charging Time (hh:mm:ss)"]=df["Charging Time (hh:mm:ss)"].dt.hour *60 + df["Charging Time (hh:mm:ss)"].dt.minute + df["Charging Time (hh:mm:ss)"].dt.second/60
+
+
+        df["Total Duration (hh:mm:ss)"][df["Total Duration (hh:mm:ss)"]==" -   "]=0
+        df["Total Duration (hh:mm:ss)"]=df["Total Duration (hh:mm:ss)"].dt.hour *60 + df["Total Duration (hh:mm:ss)"].dt.minute + df["Total Duration (hh:mm:ss)"].dt.second/60
 
 
     def to_date(self,df):

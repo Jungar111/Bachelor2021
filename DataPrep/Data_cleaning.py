@@ -24,7 +24,7 @@ class clean_paloalto:
         self.data["Longitude"]=self.data["Longitude"].round(3)
         self.data["MAC Address"]=self.data["MAC Address"].str.replace(":", "")
         self.valuta(self.data)
-        #self.to_float(self.data)
+        self.to_float(self.data)
         self.data=self.data.dropna()
         self.data.index=range(len(self.data))
         codes,uniques = pd.factorize(self.data["MAC Address"])
@@ -107,4 +107,4 @@ if __name__=='__main__':
     c = clean_paloalto()
     data = c.clean_data()
 
-    print(c.grid(data))
+    print(data["Charging Time (hh:mm:ss)"].head)

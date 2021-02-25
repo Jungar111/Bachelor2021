@@ -45,10 +45,10 @@ class viz:
 
     def basisplots(self,data):
         fig, ax = plt.subplots(2,2)
-        ax[0,0].scatter(data["MAC Address"],data["Energy (kWh)"],s=0.1) 
-        ax[0,1].scatter(data["MAC Address"],data["Charge Duration (mins)"],s=0.1) 
-        ax[1,0].scatter(data["MAC Address"],data["Gasoline Savings (gallons)"],s=0.1) 
-        ax[1,1].scatter(data["MAC Address"],data["Fee"],s=0.1) 
+        ax[0,0].scatter(data["Label"],data["Energy (kWh)"],s=0.1) 
+        ax[0,1].scatter(data["Label"],data["Charge Duration (mins)"],s=0.1) 
+        ax[1,0].scatter(data["Label"],data["Gasoline Savings (gallons)"],s=0.1) 
+        ax[1,1].scatter(data["Label"],data["Fee"],s=0.1) 
         plt.show()
 
         plt.scatter(data["Start Date"],data["Energy (kWh)"],s=0.1)
@@ -143,8 +143,10 @@ class viz:
 
 if __name__=='__main__':
     c = clean_paloalto()
-    data = c.clean_data()
+    data = pd.read_csv("data/createdDat/TimeBuckets.csv")
     v = viz()
+    #v.basisplots(data)
+    print(data.head())
     #v.by_dateplot(data)
     
     

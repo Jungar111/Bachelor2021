@@ -11,7 +11,7 @@ from DataPrep.Data_cleaning import clean_paloalto
 class modelling:
     def lmmodels(self,df):
         from sklearn.linear_model import LinearRegression
-        x = df["Charge Duration (mins)"].values.reshape(-1, 1)
+        x = df["Chargeing Time (hh:mm:ss)"].values.reshape(-1, 1)
         y =  df["Energy (kWh)"].values.reshape(-1, 1)
         #lm1 = LinearRegression()
         #lm1.fit(x,y) 

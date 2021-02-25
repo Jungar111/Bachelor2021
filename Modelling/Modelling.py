@@ -1,3 +1,5 @@
+import sys
+sys.path.append(".")
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -6,16 +8,57 @@ import scipy
 import math
 import plotly.express as px
 import matplotlib.patches as mpatches
+from sklearn.linear_model import LinearRegression
+from DataPrep.ImportData import importer
+from sklearn.model_selection import train_test_split
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
+from sklearn.metrics import r2_score
+import tensorflow as tf
 
-from DataPrep.Data_cleaning import clean_paloalto
+
+
 class modelling:
-    def lmmodels(self,df):
-        from sklearn.linear_model import LinearRegression
-        x = df["Chargeing Time (hh:mm:ss)"].values.reshape(-1, 1)
-        y =  df["Energy (kWh)"].values.reshape(-1, 1)
-        #lm1 = LinearRegression()
-        #lm1.fit(x,y) 
-        #Y_pred = lm1.predict(x)
+    def lmmodels1(self,df):
+        X_train,X_test,X_val,y_train,y_test,y_val = self.ttsplit(df)
+        lm1 = LinearRegression()
+        lm1.fit(X_train,y_train) 
+        print(lm1.score(X_test,y_test))
+    
+    def ttsplit(self,df,target="Energy (kWh)"):
+        cols = df.drop(columns=[target,"Start Date"]).columns.to_list()
+        X = df[cols]
+        y = df[target]
+
+        X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.20)
+        X_train,X_val,y_train,y_val = train_test_split(X_train,y_train,test_size=0.10)
+
+        return X_train,X_test, X_val,y_train,y_test, y_val
+    
+    def neuralnet(self,df):
+        model = Sequential()
+
+        model.add(Dense(500, input_dim=7, activation='relu', name="InputLayer"))
+        model.add(Dropout(rate=0.5, name="Dropout1"))
+        model.add(Dense(1000, activation='relu', name="HiddenLayer1"))
+        model.add(Dropout(rate=0.5, name="Dropout2"))
+        model.add(Dense(200, activation='relu', name="HiddenLayer2"))
+        model.add(Dropout(rate=0.5, name="Dropout3"))
+        model.add(Dense(1, activation='relu', name="OutputLayer"))
+
+        model.compile(loss='mean_absolute_error', optimizer='adam', metrics=['accuracy'])
+        print(model.summary())
+
+        mse = tf.keras.losses.MeanAbsoluteError()
+
+        X_train,X_test,X_val,y_train,y_test,y_val = self.ttsplit(df)
+
+        model.fit(X_train,y_train, epochs = 5, batch_size=128, validation_data=(X_val,y_val))
+
+        y_pred = model.predict(X_test)
+
+        print(f"{r2_score(y_test,y_pred)} \nMAE: {mse(y_test, y_pred).numpy()}​")
+        
         
 
 class plot:
@@ -30,28 +73,21 @@ class plot:
         plt.show()
     
 
-    def lmmodels1(self,df):
-        from sklearn.linear_model import LinearRegression
-        x = df["Charge Duration (mins)"].values.reshape(-1, 1)
-        y =  df["Energy (kWh)"].values.reshape(-1, 1)
-        lm1 = LinearRegression()
-        lm1.fit(x,y) 
-        Y_pred = lm1.predict(x)
+        # y_pred = lm1.predict(x)
 
-        plt.scatter(x,y,c=pd.factorize(df["Port Type"])[0], alpha=0.3)
-        #plt.scatter(x,y)
+        # plt.scatter(x,y,c=pd.factorize(df["Port Type"])[0], alpha=0.3)
+        # #plt.scatter(x,y)
 
-        #plt.hexbin(x,y, gridsize=50)
-        #plt.plot(x,Y_pred, c="red")
-        plt.show()
+        # #plt.hexbin(x,y, gridsize=50)
+        # #plt.plot(x,Y_pred, c="red")
+        # plt.show()
     
 
 
 if __name__=='__main__':
-    c = clean_paloalto()
     m = modelling()
     p = plot()
-    data = c.clean_data()
+    data = importer().Import()
     
-    #m.lmmodels(data)
-    m.lmmodels1(data)
+    # m.lmmodels1(data)
+    m.neuralnet(data)

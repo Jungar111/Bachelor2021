@@ -18,6 +18,7 @@ import tensorflow as tf
 
 
 
+
 class modelling:
     def lmmodels1(self,df):
         X_train,X_test,X_val,y_train,y_test,y_val = self.ttsplit(df)
@@ -30,8 +31,8 @@ class modelling:
         X = df[cols]
         y = df[target]
 
-        X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.20)
-        X_train,X_val,y_train,y_val = train_test_split(X_train,y_train,test_size=0.10)
+        X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.20, random_state=42)
+        X_train,X_val,y_train,y_val = train_test_split(X_train,y_train,test_size=0.10, random_state=42)
 
         return X_train,X_test, X_val,y_train,y_test, y_val
     
@@ -41,15 +42,17 @@ class modelling:
         model = Sequential()
         model.add(Dense(1000, input_dim=12, activation='relu'))
         model.add(Dropout(rate=0.5))
+        model.add(Dense(1000, activation='relu'))
+        model.add(Dropout(rate=0.5))
         model.add(Dense(200, activation='relu'))
         model.add(Dropout(rate=0.5))
-        model.add(Dense(1, activation='relu'))
+        model.add(Dense(1, activation='linear'))
 
         # compile the keras model
         model.compile(loss='mse', optimizer='adam')
 
         # fit the keras model on the dataset
-        model.fit(X_train,y_train, epochs = 25, batch_size=128, validation_data=(X_val,y_val))
+        model.fit(X_train,y_train, epochs = 100, batch_size=64, validation_data=(X_val,y_val))
 
         # evaluate the keras model
         y_pred = model.predict(X_test)
@@ -60,35 +63,9 @@ class modelling:
 
         model.save("Models/NNWithLags.keras")
         
-        
-        
-
-class plot:
-    def poiplot(self,df):    
-        purple_patch = mpatches.Patch(color="Purple", label='Plug type = J1772')
-        yellow_patch = mpatches.Patch(color="Yellow", label='Plug type = NEMA 5-20R')
-
-        #plt.scatter(x,y,c=df["Port Type"])
-
-        plt.hexbin(x,y, gridsize=50)
-        #plt.plot(x,Y_pred, c="red")
-        plt.show()
-    
-
-        # y_pred = lm1.predict(x)
-
-        # plt.scatter(x,y,c=pd.factorize(df["Port Type"])[0], alpha=0.3)
-        # #plt.scatter(x,y)
-
-        # #plt.hexbin(x,y, gridsize=50)
-        # #plt.plot(x,Y_pred, c="red")
-        # plt.show()
-    
-
 
 if __name__=='__main__':
     m = modelling()
-    p = plot()
     data = importer().LagCreation()
     
     m.neuralnet(data)

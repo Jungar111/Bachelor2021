@@ -4,6 +4,7 @@ import platform
 import pandas as pd
 from DataPrep.DataBuckets import Buckets
 from DataPrep.LagCreation import lags
+from sklearn import preprocessing
 
 class importer:
     def __init__(self):
@@ -23,6 +24,7 @@ class importer:
         self.df = self.df.drop(columns=["Original Duration", "Original Start", "Unnamed: 0", "Original Index","Original Port Type"])
         self.df.columns = ["Start Date", "Charging Time (mins)", "Energy (kWh)", "Total Duration (mins)", "Longitude", "Latitude", "Port Number", "Fee", "ClusterID"]
         self.df=self.df.dropna()
+        #self.normalizedata()
         return self.df
 
     def LagCreation(self):
@@ -31,6 +33,14 @@ class importer:
 
         lagsData = l.buildLaggedFeatures(data, ["Energy (kWh)"])
         return lagsData
+    
+    def normalizedata(self):
+        min_max_scaler = preprocessing.MinMaxScaler()
+        cols = self.df[["Start Date","Longitude","Latitude","Port Number","ClusterID"]]
+        df_scaled = pd.DataFrame(min_max_scaler.fit_transform(self.df.drop(columns=["Start Date"])),columns=self.df.drop(columns=["Start Date"]).columns.T,index=self.df.index.T)
+        self.df = df_scaled
+        self.df[["Start Date","Longitude","Latitude","Port Number","ClusterID"]] = cols
+
 
 
 if __name__ == "__main__":

@@ -23,6 +23,7 @@ class importer:
         self.df = self.df.drop(columns=["Original Duration", "Original Start", "Unnamed: 0", "Original Index","Original Port Type"])
         self.df.columns = ["Start Date", "Charging Time (mins)", "Energy (kWh)", "Total Duration (mins)", "Longitude", "Latitude", "Port Number", "Fee", "ClusterID"]
         self.df=self.df.dropna()
+        #self.OneHotEncode()
         return self.df
 
     def LagCreation(self):
@@ -31,11 +32,23 @@ class importer:
 
         lagsData = l.buildLaggedFeatures(data, ["Energy (kWh)"])
         return lagsData
+    
+    def OneHotEncode(self):
+        cluster_dummy = pd.get_dummies(self.df.ClusterID, prefix="Cluster")
+        day_month_dummy = pd.get_dummies(self.df["Start Date"].dt.day, prefix="Month_Day")
+        day_week_dummy = pd.get_dummies(self.df["Start Date"].dt.dayofweek, prefix="Week_Day")
+        day_hour_dummy = pd.get_dummies(self.df["Start Date"].dt.hour, prefix="Day_Hour")
+        month_year_dummy = pd.get_dummies(self.df["Start Date"].dt.month, prefix="Year_Month")
+        year_dummy = pd.get_dummies(self.df["Start Date"].dt.year, prefix="Year")
+        res = pd.concat([cluster_dummy,day_month_dummy,day_week_dummy,day_hour_dummy,month_year_dummy,year_dummy], axis=1)
+        self.df = pd.concat([self.df, res], axis=1)
+        
 
 
 if __name__ == "__main__":
     i = importer()
     df = i.Import()
+    print(df.head())
     
     
 

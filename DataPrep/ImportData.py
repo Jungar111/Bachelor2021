@@ -3,6 +3,7 @@ sys.path.append(".")
 import platform
 import pandas as pd
 from DataPrep.DataBuckets import Buckets
+from DataPrep.LagCreation import lags
 
 class importer:
     def __init__(self):
@@ -23,6 +24,13 @@ class importer:
         self.df.columns = ["Start Date", "Charging Time (mins)", "Energy (kWh)", "Total Duration (mins)", "Longitude", "Latitude", "Port Number", "Fee", "ClusterID"]
         self.df=self.df.dropna()
         return self.df
+
+    def LagCreation(self):
+        l = lags()
+        data = self.Import()
+
+        lagsData = l.buildLaggedFeatures(data, ["Energy (kWh)"])
+        return lagsData
 
 
 if __name__ == "__main__":

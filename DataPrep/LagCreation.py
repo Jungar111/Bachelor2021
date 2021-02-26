@@ -3,9 +3,9 @@ import pandas as pd
 class lags:
     def __init__(self):
         if platform.system() == "Darwin":
-            self.data = pd.read_csv("TimeBuckets.csv")
+            self.data = pd.read_csv("Data/createdDat/TimeBuckets.csv")
         elif platform.system() == "Windows":
-            self.data = pd.read_csv("TimeBuckets.csv")
+            self.data = pd.read_csv("Data\\createdDat\\TimeBuckets.csv")
 
     def buildLaggedFeatures(self, s, columns, lag=5,dropna=True):
         '''
@@ -36,8 +36,11 @@ class lags:
         else:
             return res 
 
+
+
 if __name__ == '__main__':
     l = lags()
-    data = l.data[["Start Date", "Total Duration (hh:mm:ss)", "Charging Time (hh:mm:ss)"]]
-    lagsData = l.buildLaggedFeatures(data, data.columns)
+    data = l.data
+
+    lagsData = l.buildLaggedFeatures(data, ["Energy (kWh)"])
     print(lagsData.head(10))

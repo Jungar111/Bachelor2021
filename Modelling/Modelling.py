@@ -13,7 +13,7 @@ from DataPrep.ImportData import importer
 from sklearn.model_selection import train_test_split
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, mean_absolute_error
 import tensorflow as tf
 
 
@@ -36,28 +36,30 @@ class modelling:
         return X_train,X_test, X_val,y_train,y_test, y_val
     
     def neuralnet(self,df):
+        X_train,X_test, X_val,y_train,y_test, y_val = self.ttsplit(df)
+
         model = Sequential()
+        model.add(Dense(1000, input_dim=12, activation='relu'))
+        model.add(Dropout(rate=0.5))
+        model.add(Dense(200, activation='relu'))
+        model.add(Dropout(rate=0.5))
+        model.add(Dense(1, activation='relu'))
 
-        model.add(Dense(500, input_dim=7, activation='relu', name="InputLayer"))
-        model.add(Dropout(rate=0.5, name="Dropout1"))
-        model.add(Dense(1000, activation='relu', name="HiddenLayer1"))
-        model.add(Dropout(rate=0.5, name="Dropout2"))
-        model.add(Dense(200, activation='relu', name="HiddenLayer2"))
-        model.add(Dropout(rate=0.5, name="Dropout3"))
-        model.add(Dense(1, activation='relu', name="OutputLayer"))
+        # compile the keras model
+        model.compile(loss='mse', optimizer='adam')
 
-        model.compile(loss='mean_absolute_error', optimizer='adam', metrics=['accuracy'])
-        print(model.summary())
+        # fit the keras model on the dataset
+        model.fit(X_train,y_train, epochs = 25, batch_size=128, validation_data=(X_val,y_val))
 
-        mse = tf.keras.losses.MeanAbsoluteError()
-
-        X_train,X_test,X_val,y_train,y_test,y_val = self.ttsplit(df)
-
-        model.fit(X_train,y_train, epochs = 5, batch_size=128, validation_data=(X_val,y_val))
-
+        # evaluate the keras model
         y_pred = model.predict(X_test)
 
-        print(f"{r2_score(y_test,y_pred)} \nMAE: {mse(y_test, y_pred).numpy()}​")
+        # evaluate predictions
+        print("\nMAE=%f" % mean_absolute_error(y_test, y_pred))
+        print("r^2=%f" % r2_score(y_test, y_pred))
+
+        model.save("Models/NNWithLags.keras")
+        
         
         
 
@@ -87,7 +89,6 @@ class plot:
 if __name__=='__main__':
     m = modelling()
     p = plot()
-    data = importer().Import()
+    data = importer().LagCreation()
     
-    # m.lmmodels1(data)
     m.neuralnet(data)

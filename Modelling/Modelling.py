@@ -45,7 +45,7 @@ class modelling:
     def neuralnet(self):
 
         model = Sequential()
-        model.add(Dense(1000, input_dim=12, activation='relu'))
+        model.add(Dense(1000, input_dim=8, activation='relu'))
         model.add(Dropout(rate=0.5))
         model.add(Dense(1000, activation='relu'))
         model.add(Dropout(rate=0.5))
@@ -88,4 +88,5 @@ class modelling:
 
 if __name__=='__main__':
     m = modelling()
-    m.lmmodels1()
+    #m.neuralnet()
+

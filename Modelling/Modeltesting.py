@@ -14,9 +14,9 @@ class tests:
     
     def load_model(self, model):
         if platform.system() == "Darwin":
-            m = keras.models.load_model(f"Models/{model}")
+            m = keras.models.load_model(f"Modelling/Models/{model}")
         elif platform.system() == "Windows":
-            m = keras.models.load_model(f"Models\\{model}")
+            m = keras.models.load_model(f"Modelling\\Models\\{model}")
         
         return m
         

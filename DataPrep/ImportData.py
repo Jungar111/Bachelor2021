@@ -21,8 +21,9 @@ class importer:
     def Import(self):
         self.df = self.to_date(self.df)
         self.df = self.df[self.df["Start Date"].dt.year < 2020]
-        self.df = self.df.drop(columns=["Original Duration", "Original Start", "Unnamed: 0", "Original Index","Original Port Type"])
-        self.df.columns = ["Start Date", "Charging Time (mins)", "Energy (kWh)", "Total Duration (mins)", "Longitude", "Latitude", "Port Number", "Fee", "ClusterID"]
+        self.df = self.df.drop(columns=["Unnamed: 0","Original Port Type"])
+        #print(self.df.columns)
+        self.df.columns = ['Start Date', 'ClusterID', 'Charging Time (mins)', 'Energy (kWh)', 'Total Duration (mins)', 'Port Number', 'Level 1', 'Level 2']
         self.df=self.df.dropna()
         #self.normalizedata()
         #self.OneHotEncode()

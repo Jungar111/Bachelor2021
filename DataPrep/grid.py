@@ -1,7 +1,7 @@
 import sys
 sys.path.append(".")
 from DataPrep.Data_cleaning import clean_paloalto
-from sklearn.cluster import KMeans, DBSCAN
+from sklearn.cluster import DBSCAN
 import pandas as pd
 
 
@@ -34,24 +34,15 @@ class gridmap:
 
     def grid(self):
         loc,lat,lon = self.getloc()
-        db = DBSCAN(eps=0.002,min_samples=1).fit(loc)
+        dbscan = DBSCAN(eps=0.002,min_samples=1).fit(loc)
 
-        label = pd.DataFrame([lat,lon,db.labels_]).T
+        label = pd.DataFrame([lat,lon,dbscan.labels_]).T
         label.columns=["Latitude","Longitude","Label"]
-        dbscan = DBSCAN().fit(self.data[["Latitude","Longitude"]])
-        
-        label = dbscan.labels_
-        
-        griddf = self.data
-        griddf["Label"]=label
-        #griddf = griddf.apply(self.addCenter, axis=1)
-        #griddf.head()
-        
+        label["Label"]=label["Label"].astype(int)
+
 
         griddf = self.data
         griddf = griddf.merge(label, on=["Latitude","Longitude"])
- 
-        
         
         return griddf
 
@@ -59,6 +50,6 @@ class gridmap:
 if __name__=='__main__':
     g = gridmap()
     #print(g.getloc())
-    df = g.grid()
+    df=g.grid()
     
     df.to_csv("data/createdDat/CenteredData.csv")

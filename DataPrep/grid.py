@@ -1,7 +1,7 @@
 import sys
 sys.path.append(".")
 from DataPrep.Data_cleaning import clean_paloalto
-from sklearn.cluster import DBSCAN
+from sklearn.cluster import KMeans, DBSCAN
 import pandas as pd
 
 
@@ -38,6 +38,14 @@ class gridmap:
 
         label = pd.DataFrame([lat,lon,db.labels_]).T
         label.columns=["Latitude","Longitude","Label"]
+        dbscan = DBSCAN().fit(self.data[["Latitude","Longitude"]])
+        
+        label = dbscan.labels_
+        
+        griddf = self.data
+        griddf["Label"]=label
+        #griddf = griddf.apply(self.addCenter, axis=1)
+        #griddf.head()
         
 
         griddf = self.data

@@ -1,10 +1,11 @@
 import sys
-sys.path.append(".")
+sys.path.append("..")
 import platform
 import pandas as pd
 from DataPrep.DataBuckets import Buckets
 from DataPrep.LagCreation import lags
 from sklearn import preprocessing
+import numpy as np
 
 class importer:
     def __init__(self):
@@ -25,9 +26,18 @@ class importer:
         #print(self.df.columns)
         self.df.columns = ['Start Date', 'ClusterID', 'Charging Time (mins)', 'Energy (kWh)', 'Total Duration (mins)', 'Port Number', 'Level 1', 'Level 2']
         self.df=self.df.dropna()
+        
+        self.df = self.df.apply(self.standardizeConsumption, axis=1)
+        
+        
         #self.normalizedata()
-        #self.OneHotEncode()
+        print(self.df.columns)
+        self.OneHotEncode()
         return self.df
+
+    def standardizeConsumption(self, s):
+        s["Energy (kWh)"] = s["Energy (kWh)"]/s["Port Number"]
+        return s
 
     def LagCreation(self):
         l = lags()
@@ -47,19 +57,17 @@ class importer:
         cluster_dummy = pd.get_dummies(self.df.ClusterID, prefix="Cluster")
         day_month_dummy = pd.get_dummies(self.df["Start Date"].dt.day, prefix="Month_Day")
         day_week_dummy = pd.get_dummies(self.df["Start Date"].dt.dayofweek, prefix="Week_Day")
-        day_hour_dummy = pd.get_dummies(self.df["Start Date"].dt.hour, prefix="Day_Hour")
         month_year_dummy = pd.get_dummies(self.df["Start Date"].dt.month, prefix="Year_Month")
-        year_dummy = pd.get_dummies(self.df["Start Date"].dt.year, prefix="Year")
-        res = pd.concat([cluster_dummy,day_month_dummy,day_week_dummy,day_hour_dummy,month_year_dummy,year_dummy], axis=1)
+        res = pd.concat([cluster_dummy,day_month_dummy,day_week_dummy,month_year_dummy], axis=1)
         self.df = pd.concat([self.df, res], axis=1)
         
 
 
 if __name__ == "__main__":
     i = importer()
-    df = i.Import()
+    df = i.LagCreation()
     print(df.head())
-    
+    print(df.columns)
     
 
     

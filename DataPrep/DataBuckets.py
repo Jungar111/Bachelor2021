@@ -7,7 +7,7 @@ import scipy
 import math
 import plotly.express as px
 import sys
-sys.path.append("..")
+sys.path.append(".")
 import numpy as np
 import datetime as dt
 import time
@@ -40,7 +40,7 @@ class Buckets:
         df["Charging Time (hh:mm:ss)"]=pd.to_datetime(df["Charging Time (hh:mm:ss)"],format="%Y-%m-%d %H:%M:%S")
         return df
 
-    def proportionalsplit(self, s, freq="2H"):
+    def proportionalsplit(self, s, freq="D"):
         '''
         From StackOverflow: https://stackoverflow.com/questions/66274081/how-to-discretize-time-series-with-overspilling-durations/66280942#66280942
         '''
@@ -49,7 +49,7 @@ class Buckets:
         trCharge = pd.date_range(st.floor(freq), etCharge, freq=freq)
         etPark = st + pd.Timedelta(minutes=s["Total Duration (hh:mm:ss)"])
         trPark = pd.date_range(st.floor(freq), etPark, freq=freq)
-        lmin = {"2H":120}
+        lmin = {"D":1440}
         # ratio of how numeric values should be split across new buckets
         ratioCharge = np.minimum((np.where(trCharge<st, trCharge.shift()-st, etCharge-trCharge)/(10**9*60)).astype(int), np.full(len(trCharge),lmin[freq]))
         ratioCharge = ratioCharge / ratioCharge.sum()

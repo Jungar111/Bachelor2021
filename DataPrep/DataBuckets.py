@@ -18,7 +18,7 @@ from collections import Counter
 
 class Buckets:
     def __init__(self):
-        self.df = pd.read_csv('../data/createdDat/CenteredData.csv')
+        self.df = pd.read_csv('data/createdDat/CenteredData.csv')
         self.df = self.to_date(self.df)
         self.df = self.to_float(self.df)
         

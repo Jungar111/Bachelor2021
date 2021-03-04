@@ -18,6 +18,7 @@ import tensorflow as tf
 import statsmodels.api as sm
 from sklearn.decomposition import PCA
 from sklearn.kernel_ridge import KernelRidge
+from keras.layers import LSTM
 
 
 
@@ -88,9 +89,23 @@ class modelling:
         plt.show()
 
         
+    def LSTM(self):
+        look_back = 5
+        model = Sequential()
+        model.add(LSTM(4, look_back))
+        model.add(Dense(1), activation = 'relu')
+        model.compile(loss='mean_squared_error', optimizer='adam')
+        model.fit(self.X_train, self.y_train, epochs=100, batch_size=1, verbose=2)
+        y_pred = model.predict(self.X_test)
 
+        # evaluate predictions
+        print("\nMAE=%f" % mean_absolute_error(self.y_test, y_pred))
+        print("r^2=%f" % r2_score(self.y_test, y_pred))
+
+        model.save("Models/LSTM.keras")
+        return r2_score(self.y_test, y_pred)
 
 if __name__=='__main__':
     m = modelling()
-    m.neuralnet()
+    m.LSTM()
     

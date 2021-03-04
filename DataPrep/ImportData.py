@@ -10,7 +10,7 @@ import numpy as np
 class importer:
     def __init__(self):
         if platform.system() == "Darwin":
-            self.df = pd.read_csv("../data/createdDat/TimeBuckets.csv")
+            self.df = pd.read_csv("data/createdDat/TimeBuckets.csv")
         elif platform.system() == "Windows":
             self.df = pd.read_csv("data\\createdDat\\TimeBuckets.csv")
 

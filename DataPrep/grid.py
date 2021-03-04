@@ -1,11 +1,7 @@
 import sys
 sys.path.append(".")
 from DataPrep.Data_cleaning import clean_paloalto
-<<<<<<< HEAD
-from sklearn.cluster import DBSCAN
-=======
 from sklearn.cluster import KMeans, DBSCAN
->>>>>>> f1094a4 (Fixed data after Fransisco talk)
 import pandas as pd
 
 

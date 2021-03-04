@@ -1,5 +1,5 @@
 import sys
-sys.path.append("..")
+sys.path.append(".")
 import platform
 import pandas as pd
 from DataPrep.DataBuckets import Buckets
@@ -16,7 +16,6 @@ class importer:
         
         self.df = pd.read_csv(pdf)
         self.POIs = pd.read_csv(ppoi)
-
 
     def to_date(self,df):
         df["Start Date"]=pd.to_datetime(df["Start Date"],format="%Y-%m-%d %H:%M:%S",errors="coerce")

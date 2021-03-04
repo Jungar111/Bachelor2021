@@ -29,9 +29,7 @@ class importer:
         
         self.df = self.df.apply(self.standardizeConsumption, axis=1)
         
-        
         #self.normalizedata()
-        print(self.df.columns)
         self.OneHotEncode()
         return self.df
 

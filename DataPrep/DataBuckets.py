@@ -23,6 +23,7 @@ class Buckets:
         self.df = pd.read_csv(pcentered.absolute())
         self.df = self.to_date(self.df)
         self.df = self.to_float(self.df)
+ 
         
 
 
@@ -65,7 +66,7 @@ class Buckets:
                 "Charging Time (hh:mm:ss)": s["Charging Time (hh:mm:ss)"] * ratioCharge,
                 "Energy (kWh)": s["Energy (kWh)"] * ratioCharge,
                 "Total Duration (hh:mm:ss)": s["Total Duration (hh:mm:ss)"] * ratioPark,
-                "Longitude": np.full(len(trCharge),s["CenterLon"]), "Latitude": np.full(len(trCharge),s["Latitude"]), "Original Port Type": np.full(len(trCharge),s["Port Type"]), "Port Number": np.full(len(trCharge), s["Port Number"]), 
+                "CenterLon": np.full(len(trCharge),s["CenterLon"]), "CenterLat": np.full(len(trCharge),s["Latitude"]), "Original Port Type": np.full(len(trCharge),s["Port Type"]), "Port Number": np.full(len(trCharge), s["Port Number"]), 
                 "Fee": s["Fee"] * ratioCharge, "Label": s["Label"]
             }
 
@@ -82,7 +83,7 @@ class Buckets:
 
         # let's have a look at everything in 2H resample...
         df3 = df2.groupby(["Start Date","Label"], as_index = False).agg({**{c:lambda s: list(s) for c in df2.columns if "Original" in c},
-                                        **{c:"sum" for c in ["Charging Time (hh:mm:ss)","Energy (kWh)", "Total Duration (hh:mm:ss)", "Port Number"]}})
+                                        **{c:"sum" for c in ["Charging Time (hh:mm:ss)","Energy (kWh)", "Total Duration (hh:mm:ss)", "Port Number"]},**{"CenterLon":min,"CenterLat":min}})
 
         df3 = df3.drop(columns=["Original Duration", "Original Start", "Original Index"])
         df3 = df3.apply(self.countLevels, axis=1)

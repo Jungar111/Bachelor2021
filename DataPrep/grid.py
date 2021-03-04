@@ -9,13 +9,6 @@ import pandas as pd
 class gridmap:
     def __init__(self):
         self.data = clean_paloalto().clean_data()
-    
-    # def addCenter(self, s):
-    #     cluster = s["Label"]
-    #     s["CenterLon"] = self.clusters[cluster][1]
-    #     s["CenterLat"] = self.clusters[cluster][0]
-
-    #     return s
 
     def getloc(self):
         lat = []
@@ -43,12 +36,23 @@ class gridmap:
 
         griddf = self.data
         griddf = griddf.merge(label, on=["Latitude","Longitude"])
-        
+        self.center(griddf)
         return griddf
+    
+    def center(self,df):
+        df["CenterLon"]=0
+        df["CenterLat"]=0
+        for i in range(8):
+            df["CenterLon"][df["Label"]==i]=df["Longitude"][df["Label"]==i].mean()
+            df["CenterLat"][df["Label"]==i]=df["Latitude"][df["Label"]==i].mean()
+        
+
+    
 
 
 if __name__=='__main__':
     g = gridmap()
+
     #print(g.getloc())
     df=g.grid()
     

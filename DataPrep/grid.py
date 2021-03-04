@@ -5,6 +5,7 @@ from sklearn.cluster import DBSCAN
 import pandas as pd
 
 
+
 class gridmap:
     def __init__(self):
         self.data = clean_paloalto().clean_data()
@@ -32,26 +33,24 @@ class gridmap:
 
 
     def grid(self):
-        db = DBSCAN(eps=0.002,min_samples=1).fit(gridmap().getloc()[0])
-        #kmeans = KMeans(n_clusters=c, random_state=0).fit(self.data[["Latitude","Longitude"]])
-        #self.clusters=kmeans.cluster_centers_
-        label = pd.DataFrame([gridmap().getloc()[1],gridmap().getloc()[2],db.labels_])
-        #label.columns(["Latitude","Longitude","Label"])
-        print(label)
+        loc,lat,lon = self.getloc()
+        db = DBSCAN(eps=0.002,min_samples=1).fit(loc)
 
-        #griddf = self.data
-        #merge(griddf,label)
-        #griddf["Label"]=label
-        #griddf = griddf.apply(self.addCenter, axis=1)
-        #griddf.head()
+        label = pd.DataFrame([lat,lon,db.labels_]).T
+        label.columns=["Latitude","Longitude","Label"]
+        
+
+        griddf = self.data
+        griddf = griddf.merge(label, on=["Latitude","Longitude"])
+ 
         
         
-    #     #return griddf#, self.clusters
+        return griddf
 
 
 if __name__=='__main__':
     g = gridmap()
     #print(g.getloc())
-    #df, c = g.grid()
-    print(g.grid())
-    #df.to_csv("data/createdDat/CenteredData.csv")
+    df = g.grid()
+    
+    df.to_csv("data/createdDat/CenteredData.csv")

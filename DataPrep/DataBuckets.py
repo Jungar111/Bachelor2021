@@ -13,12 +13,14 @@ import datetime as dt
 import time
 import matplotlib.pyplot as plt
 from collections import Counter
+from pathlib import Path
 
 
 
 class Buckets:
     def __init__(self):
-        self.df = pd.read_csv('data/createdDat/CenteredData.csv')
+        pcentered = Path("data", "createdDat", "centeredData.csv")
+        self.df = pd.read_csv(pcentered.absolute())
         self.df = self.to_date(self.df)
         self.df = self.to_float(self.df)
         

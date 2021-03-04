@@ -1,11 +1,11 @@
 import platform
 import pandas as pd
+from pathlib import Path
 class lags:
     def __init__(self):
-        if platform.system() == "Darwin":
-            self.data = pd.read_csv("data/createdDat/TimeBuckets.csv")
-        elif platform.system() == "Windows":
-            self.data = pd.read_csv("Data\\createdDat\\TimeBuckets.csv")
+        p = Path("data", "createdDat", "TimeBuckets.csv").absolute()
+        self.data = pd.read_csv(p)
+
 
     def buildLaggedFeatures(self, s, columns, lag=5,dropna=True):
         '''

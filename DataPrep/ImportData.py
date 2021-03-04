@@ -5,11 +5,8 @@ import pandas as pd
 from DataPrep.DataBuckets import Buckets
 from DataPrep.LagCreation import lags
 from sklearn import preprocessing
-<<<<<<< HEAD
 from geopy import distance
-=======
 import numpy as np
->>>>>>> 6d5cda2bb11d79a54166fdf0351e24d60db0b5fb
 
 class importer:
     def __init__(self):

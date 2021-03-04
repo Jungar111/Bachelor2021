@@ -3,7 +3,7 @@ import pandas as pd
 class lags:
     def __init__(self):
         if platform.system() == "Darwin":
-            self.data = pd.read_csv("Data/createdDat/TimeBuckets.csv")
+            self.data = pd.read_csv("../data/createdDat/TimeBuckets.csv")
         elif platform.system() == "Windows":
             self.data = pd.read_csv("Data\\createdDat\\TimeBuckets.csv")
 

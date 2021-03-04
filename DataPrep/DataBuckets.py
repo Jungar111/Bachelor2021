@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -5,22 +6,22 @@ import numpy as np
 import scipy
 import math
 import plotly.express as px
-
+import sys
+sys.path.append(".")
 import numpy as np
-import pandas as pd
 import datetime as dt
 import time
 import matplotlib.pyplot as plt
+from collections import Counter
 
 
-
-start = time.time()
 
 class Buckets:
     def __init__(self):
         self.df = pd.read_csv('data/createdDat/CenteredData.csv')
         self.df = self.to_date(self.df)
         self.df = self.to_float(self.df)
+        
 
 
     def to_float(self,df):
@@ -32,7 +33,6 @@ class Buckets:
         return df
 
     def to_date(self,df):
-        print(df.head())
         df["Start Date"]=pd.to_datetime(df["Start Date"],format="%Y-%m-%d %H:%M:%S",errors="coerce")
         df["End Date"]=pd.to_datetime(df["End Date"],format="%Y-%m-%d %H:%M:%S",errors="coerce")
 
@@ -40,7 +40,7 @@ class Buckets:
         df["Charging Time (hh:mm:ss)"]=pd.to_datetime(df["Charging Time (hh:mm:ss)"],format="%Y-%m-%d %H:%M:%S")
         return df
 
-    def proportionalsplit(self, s, freq="2H"):
+    def proportionalsplit(self, s, freq="D"):
         '''
         From StackOverflow: https://stackoverflow.com/questions/66274081/how-to-discretize-time-series-with-overspilling-durations/66280942#66280942
         '''
@@ -49,7 +49,7 @@ class Buckets:
         trCharge = pd.date_range(st.floor(freq), etCharge, freq=freq)
         etPark = st + pd.Timedelta(minutes=s["Total Duration (hh:mm:ss)"])
         trPark = pd.date_range(st.floor(freq), etPark, freq=freq)
-        lmin = {"2H":120}
+        lmin = {"D":1440}
         # ratio of how numeric values should be split across new buckets
         ratioCharge = np.minimum((np.where(trCharge<st, trCharge.shift()-st, etCharge-trCharge)/(10**9*60)).astype(int), np.full(len(trCharge),lmin[freq]))
         ratioCharge = ratioCharge / ratioCharge.sum()
@@ -67,25 +67,29 @@ class Buckets:
                 "Fee": s["Fee"] * ratioCharge, "Label": s["Label"]
             }
 
+    def countLevels(self, s):
+        counts = Counter(s["Original Port Type"])
+        s["Level 1"] = counts["Level 1"]
+        s["Level 2"] = counts["Level 2"]
+
+        return s
+
     def main(self):
         df2 = pd.concat([pd.DataFrame(v) for v in self.df.apply(self.proportionalsplit, axis=1).values]).reset_index(drop=True)
         # everything OK?
 
-
         # let's have a look at everything in 2H resample...
-        df3 = df2.groupby(["Start Date"]).agg({**{c:lambda s: list(s) for c in df2.columns if "Original" in c},
+        df3 = df2.groupby(["Start Date","Label"], as_index = False).agg({**{c:lambda s: list(s) for c in df2.columns if "Original" in c},
                                         **{c:"sum" for c in ["Charging Time (hh:mm:ss)","Energy (kWh)", "Total Duration (hh:mm:ss)", "Port Number"]}})
 
+        df3 = df3.drop(columns=["Original Duration", "Original Start", "Original Index"])
+        df3 = df3.apply(self.countLevels, axis=1)
 
+        return df3,df2
 
-        print(df2.head(20))
-        print(df3.head(20))
-
-        df2.to_csv("data/createdDat/TimeBuckets.csv")
-
-        end = time.time()
-        #print(end - start)
 
 if __name__ == "__main__":
     b = Buckets()
-    b.main()
+    df3, df2 = b.main()
+    df3.to_csv("TimeBuckets.csv")
+    

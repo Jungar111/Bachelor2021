@@ -1,3 +1,5 @@
+import sys
+sys.path.append(".")
 import folium
 from DataPrep.grid import gridmap
 import matplotlib.cm as cm
@@ -11,7 +13,7 @@ class plotClusters:
     def foliumplot(self):
         m = folium.Map(location=[37.435, -122.16], tiles="Stamen Toner", zoom_start=13)
         g = gridmap()
-        grid = g.grid(8).groupby("Pairlocation")
+        grid = g.grid().groupby("Pairlocation")
 
         cmap = cm.viridis
         norm = Normalize(vmin=0, vmax=7)
@@ -26,4 +28,8 @@ class plotClusters:
                 fill=True,
             ).add_to(m)
 
-        m.save("Clusters.html")
+        m.save("Vizualisation\FoliumPlots\Clusters.html")
+
+if __name__=='__main__':
+    p = plotClusters()
+    p.foliumplot()

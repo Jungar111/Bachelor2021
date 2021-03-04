@@ -6,17 +6,15 @@ import keras
 import platform
 from Modelling import modelling
 from DataPrep.ImportData import importer
-
+from pathlib import Path
 class tests:
     def __init__(self):
         self.df = importer().LagCreation()
 
     
     def load_model(self, model):
-        if platform.system() == "Darwin":
-            m = keras.models.load_model(f"Modelling/Models/{model}")
-        elif platform.system() == "Windows":
-            m = keras.models.load_model(f"Modelling\\Models\\{model}")
+        pmodels = Path("Modelling", "Models", model)
+        m = keras.models.load_model(pmodels.absolute())
         
         return m
         

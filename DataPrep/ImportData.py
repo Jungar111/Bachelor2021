@@ -5,21 +5,16 @@ import pandas as pd
 from DataPrep.DataBuckets import Buckets
 from DataPrep.LagCreation import lags
 from sklearn import preprocessing
-<<<<<<< HEAD
-from geopy import distance
-=======
 import numpy as np
->>>>>>> 6d5cda2bb11d79a54166fdf0351e24d60db0b5fb
+from pathlib import Path
 
 class importer:
     def __init__(self):
-        if platform.system() == "Darwin":
-            self.df = pd.read_csv("data/createdDat/TimeBuckets.csv")
-            self.POIs = pd.read_csv("data/createdDat/points_of_int.csv")
-
-        elif platform.system() == "Windows":
-            self.df = pd.read_csv("data\\createdDat\\TimeBuckets.csv")
-            self.POIs = pd.read_csv("data\\createdDat\\points_of_int.csv")
+        pdf = str(Path("data", "createdDat", "TimeBuckets.csv").absolute())
+        ppoi = str(Path("data", "createdDat", "points_of_int.csv").absolute())
+        
+        self.df = pd.read_csv(pdf)
+        self.POIs = pd.read_csv(ppoi)
 
 
     def to_date(self,df):
@@ -31,11 +26,11 @@ class importer:
         self.df = self.df[self.df["Start Date"].dt.year < 2020]
         self.df = self.df.drop(columns=["Unnamed: 0","Original Port Type"])
         #print(self.df.columns)
-        self.df.columns = ['Start Date', 'ClusterID', 'Charging Time (mins)', 'Energy (kWh)', 'Total Duration (mins)', 'Port Number', 'Level 1', 'Level 2']
+        self.df.columns = ['Start Date', 'Label', 'Charging Time (mins)', 'Energy (kWh)', 'Total Duration (mins)', 'Port Number', 'Level 1', 'Level 2']
         self.df=self.df.dropna()
         
         self.df = self.df.apply(self.standardizeConsumption, axis=1)
-        
+        print(self.df.columns)
         #self.normalizedata()
         self.df = self.POIs_within_radius(self.df, self.POIs, 500)
         self.OneHotEncode()

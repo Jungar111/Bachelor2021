@@ -22,7 +22,7 @@ class lm:
         y_pred=lm1.predict(self.X_test)
         print("\nMAE=%f" % mean_absolute_error(self.y_test, y_pred))
         print("r^2=%f" % r2_score(self.y_test, y_pred))
-        print(lm1.coef_)
+        print(dict(zip(self.X_train.columns,lm1.coef_)))
 
         
     
@@ -41,7 +41,7 @@ if __name__=='__main__':
     #m.lmmodels1()
     print(m.lmmodels1())
 
-# Lags+date+clusterid = r^2 = 0.41
+# Lags+date+clusterid = r^2 = 0.41, coef are shit
 # date+clusterid+portnumber+level1/2 = r^2 = 0.415, coef are fucked 
 # date + clusterid = r^2 = 0.37, clusterid coef very low and date very high 
 # only lags = R^2 = 0.09, but fine coef

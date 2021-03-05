@@ -39,7 +39,7 @@ class modelling:
         return lm1
     
     def ttsplit(self,df,target="Energy (kWh)"):
-        cols = df.drop(columns=[target,"Start Date", 'Charging Time (mins)', 'Total Duration (mins)','ClusterID', 'Port Number', 'Level 1', 'Level 2']).columns.to_list()
+        cols = df.drop(columns=[target,"Start Date", 'Charging Time (mins)', 'Total Duration (mins)','Label', 'Port Number', 'Level 1', 'Level 2']).columns.to_list()
         X = df[cols]
         y = df[target]
 

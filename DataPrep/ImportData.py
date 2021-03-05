@@ -13,7 +13,7 @@ class importer:
     def __init__(self):
         pdf = str(Path("data", "createdDat", "TimeBuckets.csv").absolute())
         ppoi = str(Path("data", "createdDat", "points_of_int.csv").absolute())
-        
+
         self.df = pd.read_csv(pdf)
         self.POIs = pd.read_csv(ppoi)
 
@@ -32,7 +32,7 @@ class importer:
         self.df = self.df.apply(self.standardizeConsumption, axis=1)
         print(self.df.columns)
         #self.normalizedata()
-        self.df = self.POIs_within_radius(self.df, self.POIs, 500)
+        #self.df = self.POIs_within_radius(self.df, self.POIs, 500)
         self.OneHotEncode()
         return self.df
 
@@ -55,7 +55,7 @@ class importer:
         self.df[["Start Date","Longitude","Latitude","Port Number","ClusterID"]] = cols
 
     def OneHotEncode(self):
-        cluster_dummy = pd.get_dummies(self.df.ClusterID, prefix="Cluster")
+        cluster_dummy = pd.get_dummies(self.df.Label, prefix="Cluster")
         day_month_dummy = pd.get_dummies(self.df["Start Date"].dt.day, prefix="Month_Day")
         day_week_dummy = pd.get_dummies(self.df["Start Date"].dt.dayofweek, prefix="Week_Day")
         month_year_dummy = pd.get_dummies(self.df["Start Date"].dt.month, prefix="Year_Month")

@@ -23,12 +23,11 @@ from keras.layers import LSTM
 
 
 class modelling:
-    def  __init__(self):
+    def  __init__(self, drops = []):
         #self.df = importer().Import()
         self.df = importer().LagCreation()
-        
+        self.df = self.df.drop(columns = drops)
         self.X_train,self.X_test, self.X_val,self.y_train,self.y_test, self.y_val = self.ttsplit(self.df)
-
 
 
 

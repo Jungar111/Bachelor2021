@@ -29,7 +29,7 @@ class importer:
         self.df=self.df.dropna()
         
         self.df = self.df.apply(self.standardizeConsumption, axis=1)
-        #self.normalizedata()
+        #self.standardize()
         self.df = self.POIs_within_radius(self.df, self.POIs, 500)
         self.OneHotEncode()
         return self.df
@@ -45,7 +45,7 @@ class importer:
         lagsData = l.buildLaggedFeatures(data, ["Energy (kWh)"])
         return lagsData
     
-    def normalizedata(self):
+    def standardize(self):
         min_max_scaler = preprocessing.MinMaxScaler()
         cols = self.df[["Start Date","Longitude","Latitude","Port Number","ClusterID"]]
         df_scaled = pd.DataFrame(min_max_scaler.fit_transform(self.df.drop(columns=["Start Date"])),columns=self.df.drop(columns=["Start Date"]).columns.T,index=self.df.index.T)

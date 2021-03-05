@@ -25,14 +25,12 @@ class importer:
         self.df = self.to_date(self.df)
         self.df = self.df[self.df["Start Date"].dt.year < 2020]
         self.df = self.df.drop(columns=["Unnamed: 0","Original Port Type"])
-        #print(self.df.columns)
-        self.df.columns = ['Start Date', 'Label', 'Charging Time (mins)', 'Energy (kWh)', 'Total Duration (mins)', 'Port Number', 'Level 1', 'Level 2']
+        self.df.columns = ['Start Date', 'Label', 'Charging Time (mins)', 'Energy (kWh)', 'Total Duration (mins)', 'Port Number','CenterLon', 'CenterLat', 'Level 1', 'Level 2']
         self.df=self.df.dropna()
         
         self.df = self.df.apply(self.standardizeConsumption, axis=1)
-        print(self.df.columns)
         #self.normalizedata()
-        #self.df = self.POIs_within_radius(self.df, self.POIs, 500)
+        self.df = self.POIs_within_radius(self.df, self.POIs, 500)
         self.OneHotEncode()
         return self.df
 
@@ -68,35 +66,37 @@ class importer:
 
         return distance.distance(POIlocation, LabelX).meters
         
-    def POIs_within_radius(self, df, poi_df, radius):
+    def POIs_within_radius(self, df, df_poi, radius):
         df_unique_label = df.groupby('Label', group_keys=False).apply(lambda df: df.sample(1))
         df_unique_label = df_unique_label[['Label','CenterLat', 'CenterLon']]
         df_unique_label = df_unique_label.set_index('Label')
         
-        for i in range(0,len(df_unique_label)): 
+        for i in range(len(df_unique_label)): 
             df_poi['Label' + str(i) + '_Lat'] = df_unique_label.at[i,'CenterLat']
             df_poi['Label' + str(i) + '_Lon'] = df_unique_label.at[i,'CenterLon']
         
-        for j in range(0,len(df_unique_label)): 
+        for j in range(len(df_unique_label)): 
             df_poi[str(j) + '_Distance'] = df_poi.apply (lambda row: self.distance_calc (row, j),axis=1)
 
         fill = pd.DataFrame()
-        for k in range(0,8):
+        for k in range(len(df_unique_label)):
             m = radius 
             LabelY = pd.DataFrame(df_poi[df_poi[(str(k) + '_Distance')] < m]['Category'].value_counts())
             LabelY = LabelY.rename(columns={"Category": k})
             LabelY = LabelY.T
-            fill = empt.append(LabelY)
-        fill = empt.reset_index()
-        fill = empt.rename(columns={"index": "Label"})
+            fill = fill.append(LabelY)
+        fill = fill.reset_index()
+        fill = fill.rename(columns={"index": "Label"})
         category_names = list(fill.columns[1:])
         category_names_count = ['# ' + x for x in category_names]
         fill = fill.rename(columns = dict(zip(category_names, category_names_count)))
         
         result = df.merge(fill, on = "Label")
-        
+        # result = result.drop(columns = [# Event])
+
         return result
 
+    
 if __name__ == "__main__":
     i = importer()
     df = i.LagCreation()

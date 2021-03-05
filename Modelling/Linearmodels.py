@@ -27,8 +27,9 @@ class lm:
         
     
     def ttsplit(self,df,target="Energy (kWh)"):
-        cols = df.drop(columns=[target,"Start Date", 'Charging Time (mins)', 'Total Duration (mins)','ClusterID',"Port Number","Level 1","Level 2"]).columns.to_list()
-        X = df[cols]
+        cols = df.drop(columns=[target,"Start Date", 'Charging Time (mins)', 'Total Duration (mins)',"Port Number","Level 1","Level 2","Energy (kWh)_lag1",'Energy (kWh)_lag2','Energy (kWh)_lag3','Energy (kWh)_lag4','Energy (kWh)_lag5',"Label"]).columns.to_list()
+        X = df[["Energy (kWh)_lag1",'Energy (kWh)_lag2','Energy (kWh)_lag3','Energy (kWh)_lag4','Energy (kWh)_lag5']]
+        print(X.head())
         y = df[target]
 
         X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.20, random_state=42)
@@ -44,7 +45,7 @@ if __name__=='__main__':
 # Lags+date+clusterid = r^2 = 0.41, coef are shit
 # date+clusterid+portnumber+level1/2 = r^2 = 0.415, coef are fucked 
 # date + clusterid = r^2 = 0.37, clusterid coef very low and date very high 
-# only lags = R^2 = 0.09, but fine coef
+# only lags = R^2 = 0.35, but fine coef
 # lags+ level  = R^2 = 0.137, but fine coef
 # lags+ level+ port number  = R^2 = 0.37, but fine coef
 # lags+ level+ port number+ year month  = R^2 = 0.37, but fine coef

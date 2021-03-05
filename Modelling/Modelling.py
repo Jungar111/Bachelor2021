@@ -23,11 +23,11 @@ from keras.layers import LSTM
 
 
 class modelling:
-    def  __init__(self, drops = []):
+    def  __init__(self, drops = [], shuffle=True):
         #self.df = importer().Import()
         self.df = importer().LagCreation()
         self.df = self.df.drop(columns = drops)
-        self.X_train,self.X_test, self.X_val,self.y_train,self.y_test, self.y_val = self.ttsplit(self.df)
+        self.X_train,self.X_test, self.X_val,self.y_train,self.y_test, self.y_val = self.ttsplit(self.df,shuffle=shuffle)
 
 
 
@@ -37,13 +37,13 @@ class modelling:
         
         return lm1
     
-    def ttsplit(self,df,target="Energy (kWh)"):
+    def ttsplit(self,df,target="Energy (kWh)",shuffle=True):
         cols = df.drop(columns=[target,"Start Date", 'Charging Time (mins)', 'Total Duration (mins)','Label', 'Port Number', 'Level 1', 'Level 2']).columns.to_list()
         X = df[cols]
         y = df[target]
 
-        X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.20, random_state=42)
-        X_train,X_val,y_train,y_val = train_test_split(X_train,y_train,test_size=0.10, random_state=42)
+        X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.20, random_state=42,shuffle=shuffle)
+        X_train,X_val,y_train,y_val = train_test_split(X_train,y_train,test_size=0.10, random_state=42,shuffle=shuffle)
 
         return X_train,X_test, X_val,y_train,y_test, y_val
     

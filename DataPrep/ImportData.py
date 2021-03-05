@@ -8,6 +8,8 @@ from sklearn import preprocessing
 from geopy import distance
 import numpy as np
 from pathlib import Path
+import holidays
+
 
 class importer:
     def __init__(self):
@@ -44,6 +46,27 @@ class importer:
 
         lagsData = l.buildLaggedFeatures(data, ["Energy (kWh)"])
         return lagsData
+
+    def is_holiday(self, df): 
+        us_ca_holidays = holidays.CountryHoliday('US', state='CA')
+        df['is_holiday'] = [1 if str(val).split()[0] in us_ca_holidays else 0 for val in df['Start Date']]
+        return df
+
+    def is_holiday_control(self, df):
+        us_ca_holidays = holidays.CountryHoliday('US', state='CA')
+        dates = []
+        holis = []
+        for date in df[df['is_holiday'] == 1]['Start Date']: 
+            datestr = str(date).split()[0]
+            dates.append(datestr)
+
+        for date in dates: 
+            holi = us_ca_holidays.get(date)
+            holis.append(holi)
+
+        control = dict(zip(dates, holis))
+    
+    return control
     
     def standardize(self):
         min_max_scaler = preprocessing.MinMaxScaler()

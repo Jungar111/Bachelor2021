@@ -66,7 +66,7 @@ class importer:
 
         control = dict(zip(dates, holis))
     
-    return control
+        return control
     
     def standardize(self):
         min_max_scaler = preprocessing.MinMaxScaler()

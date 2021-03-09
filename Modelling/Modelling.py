@@ -125,5 +125,4 @@ class modelling:
 
 if __name__=='__main__':
     m = modelling()
-    m.LSTM()
-    
+    m.LSTM()  

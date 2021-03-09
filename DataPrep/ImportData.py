@@ -26,12 +26,12 @@ class importer:
     def Import(self):
         self.df = self.to_date(self.df)
         self.df = self.df[self.df["Start Date"].dt.year < 2020]
-        self.df = self.df.drop(columns=["Unnamed: 0","Original Port Type"])
+        #self.df = self.df.drop(columns=["Unnamed: 0","Original Port Type"])
         self.df.columns = ['Start Date', 'Label', 'Charging Time (mins)', 'Energy (kWh)', 'Total Duration (mins)', 'Port Number','CenterLon', 'CenterLat', 'Level 1', 'Level 2']
         self.df=self.df.dropna()
         
         self.df = self.df.apply(self.standardizeConsumption, axis=1)
-        #self.standardize()
+        #self.normalizedata()
         self.df = self.POIs_within_radius(self.df, self.POIs, 500)
         self.OneHotEncode()
         return self.df
@@ -68,7 +68,7 @@ class importer:
     
         return control
     
-    def standardize(self):
+    def normalizedata(self):
         min_max_scaler = preprocessing.MinMaxScaler()
         cols = self.df[["Start Date","Longitude","Latitude","Port Number","ClusterID"]]
         df_scaled = pd.DataFrame(min_max_scaler.fit_transform(self.df.drop(columns=["Start Date"])),columns=self.df.drop(columns=["Start Date"]).columns.T,index=self.df.index.T)

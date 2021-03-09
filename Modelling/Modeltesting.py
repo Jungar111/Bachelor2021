@@ -4,12 +4,13 @@ import numpy as np
 import tensorflow as tf
 import keras
 import platform
-from Modelling import modelling
+from Modelling.Modelling import modelling
 from DataPrep.ImportData import importer
 from pathlib import Path
 class tests:
     def __init__(self):
         self.df = importer().LagCreation()
+
 
     
     def load_model(self, model):

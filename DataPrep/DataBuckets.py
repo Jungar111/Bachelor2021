@@ -87,13 +87,15 @@ class Buckets:
 
         df3 = df3.drop(columns=["Original Duration", "Original Start", "Original Index"])
         df3 = df3.apply(self.countLevels, axis=1)
+        df4 = df3.resample("7D", on="Start Date").agg({'Label':'min', 'Charging Time (hh:mm:ss)':'sum', 'Energy (kWh)':'sum', 'Total Duration (hh:mm:ss)':'sum', 'Port Number':'sum', 'CenterLon':'min', 'CenterLat':'min','Level 1':'sum', 'Level 2': 'sum'})
         df3 = df3.resample("D", on="Start Date").agg({'Label':'min', 'Charging Time (hh:mm:ss)':'sum', 'Energy (kWh)':'sum', 'Total Duration (hh:mm:ss)':'sum', 'Port Number':'sum', 'CenterLon':'min', 'CenterLat':'min','Level 1':'sum', 'Level 2': 'sum'})
-
-        return df3,df2
+        
+        return df3,df2,df4
 
 
 if __name__ == "__main__":
     b = Buckets()
-    df3, df2 = b.main()
+    df3, df2,df4 = b.main()
     df3.to_csv("TimeBuckets.csv")
+    df4.to_csv("TimeBucketsDaily.csv")
     

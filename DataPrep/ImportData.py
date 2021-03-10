@@ -2,7 +2,6 @@ import sys
 sys.path.append(".")
 import platform
 import pandas as pd
-from DataPrep.DataBuckets import Buckets
 from DataPrep.LagCreation import lags
 from sklearn import preprocessing
 from geopy import distance
@@ -26,15 +25,35 @@ class importer:
     def Import(self):
         self.df = self.to_date(self.df)
         self.df = self.df[self.df["Start Date"].dt.year < 2020]
-        #self.df = self.df.drop(columns=["Unnamed: 0","Original Port Type"])
+        self.df = self.df.drop(columns=["Unnamed: 0","Original Port Type"])
+        #rint(self.df.columns)
         self.df.columns = ['Start Date', 'Label', 'Charging Time (mins)', 'Energy (kWh)', 'Total Duration (mins)', 'Port Number','CenterLon', 'CenterLat', 'Level 1', 'Level 2']
-        self.df=self.df.dropna()
         
+        self.df = self.resampling()
+        self.df = self.df.dropna()
         self.df = self.df.apply(self.standardizeConsumption, axis=1)
         #self.normalizedata()
         self.df = self.POIs_within_radius(self.df, self.POIs, 500)
         self.OneHotEncode()
         return self.df
+
+
+    def resampling(self):
+        labels = self.df["Label"].unique()
+
+        dfClean2 = pd.DataFrame(columns = self.df.columns[1:])
+
+
+        for label in labels:
+            d = self.df[self.df["Label"] == label].resample("D", on="Start Date").agg({'Charging Time (mins)':'sum', 'Energy (kWh)':'sum', 'Total Duration (mins)':'sum', 'Port Number':'sum', 'CenterLon':'min', 'CenterLat':'min','Level 1':'sum', 'Level 2': 'sum'})
+            d["Label"] = label
+            
+            dfClean2 = dfClean2.append(d)
+        
+        dfClean2 = dfClean2.reset_index()
+        dfClean2 = dfClean2.rename(columns = {"index":"Start Date"})
+
+        return dfClean2
 
     def standardizeConsumption(self, s):
         s["Energy (kWh)"] = s["Energy (kWh)"]/s["Port Number"]

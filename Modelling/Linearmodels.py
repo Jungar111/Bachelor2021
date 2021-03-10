@@ -40,7 +40,8 @@ class lm:
 if __name__=='__main__':
     m = lm()
     #m.lmmodels1()
-    print(m.lmmodels1())
+    #print(m.lmmodels1())
+    print(2+2)
 
 # Lags+date+clusterid = r^2 = 0.41, coef are shit
 # date+clusterid+portnumber+level1/2 = r^2 = 0.415, coef are fucked 

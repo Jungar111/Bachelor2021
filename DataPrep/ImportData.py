@@ -35,6 +35,8 @@ class importer:
         #self.normalizedata()
         self.df = self.POIs_within_radius(self.df, self.POIs, 500)
         self.OneHotEncode()
+        self.is_holiday()
+        self.is_weekend()
         return self.df
 
 
@@ -66,10 +68,10 @@ class importer:
         lagsData = l.buildLaggedFeatures(data, ["Energy (kWh)"])
         return lagsData
 
-    def is_holiday(self, df): 
+    def is_holiday(self): 
         us_ca_holidays = holidays.CountryHoliday('US', state='CA')
-        df['is_holiday'] = [1 if str(val).split()[0] in us_ca_holidays else 0 for val in df['Start Date']]
-        return df
+        self.df['is_holiday'] = [1 if str(val).split()[0] in us_ca_holidays else 0 for val in self.df['Start Date']]
+        #return df
 
     def is_holiday_control(self, df):
         us_ca_holidays = holidays.CountryHoliday('US', state='CA')
@@ -86,6 +88,10 @@ class importer:
         control = dict(zip(dates, holis))
     
         return control
+
+    def is_weekend(self):
+        self.df['is_weekend'] = (self.df['Start Date'].dt.weekday > 4).astype(int) 
+        #return df
     
     def normalizedata(self):
         min_max_scaler = preprocessing.MinMaxScaler()

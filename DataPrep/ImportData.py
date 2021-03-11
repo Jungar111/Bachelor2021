@@ -34,6 +34,8 @@ class importer:
         #self.standardize()
         self.df = self.POIs_within_radius(self.df, self.POIs, 500)
         self.OneHotEncode()
+        self.is_holiday()
+        self.is_weekend()
         return self.df
 
     def standardizeConsumption(self, s):
@@ -67,6 +69,10 @@ class importer:
         control = dict(zip(dates, holis))
     
         return control
+
+    def is_weekend(self, df):
+        df['is_weekend'] = (df['Start Date'].dt.weekday > 4).astype(int) 
+        return df
     
     def standardize(self):
         min_max_scaler = preprocessing.MinMaxScaler()

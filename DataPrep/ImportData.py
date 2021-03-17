@@ -26,7 +26,7 @@ class importer:
         self.df = self.to_date(self.df)
         self.df = self.df[self.df["Start Date"].dt.year < 2020]
         self.df = self.df.drop(columns=["Unnamed: 0","Original Port Type"])
-        #rint(self.df.columns)
+        #print(self.df.columns)
         self.df.columns = ['Start Date', 'Label', 'Charging Time (mins)', 'Energy (kWh)', 'Total Duration (mins)', 'Port Number','CenterLon', 'CenterLat', 'Level 1', 'Level 2']
         
         self.df = self.resampling()

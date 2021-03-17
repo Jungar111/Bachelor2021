@@ -3,7 +3,9 @@ sys.path.append(".")
 from sklearn.linear_model import LinearRegression
 from DataPrep.ImportData import importer
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import r2_score, mean_absolute_error
+from sklearn.metrics import r2_score, mean_squared_error
+import numpy as np
+import matplotlib.pyplot as plt
 
 class lm:
     def  __init__(self):
@@ -20,16 +22,18 @@ class lm:
         lm1 = LinearRegression()
         lm1.fit(self.X_train,self.y_train) 
         y_pred=lm1.predict(self.X_test)
-        print("\nMAE=%f" % mean_absolute_error(self.y_test, y_pred))
+        print("\nRMSE=%f" % np.sqrt(mean_squared_error(self.y_test, y_pred)))
         print("r^2=%f" % r2_score(self.y_test, y_pred))
         print(dict(zip(self.X_train.columns,lm1.coef_)))
+        plt.scatter(self.y_test,y_pred)
+        plt.show()
 
         
     
     def ttsplit(self,df,target="Energy (kWh)"):
         cols = df.drop(columns=[target,"Start Date", 'Charging Time (mins)', 'Total Duration (mins)',"Port Number","Level 1","Level 2","Energy (kWh)_lag1",'Energy (kWh)_lag2','Energy (kWh)_lag3','Energy (kWh)_lag4','Energy (kWh)_lag5',"Label"]).columns.to_list()
         X = df[["Energy (kWh)_lag1",'Energy (kWh)_lag2','Energy (kWh)_lag3','Energy (kWh)_lag4','Energy (kWh)_lag5']]
-        print(X.head())
+        #print(X.head())
         y = df[target]
 
         X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.20, random_state=42)
@@ -40,8 +44,7 @@ class lm:
 if __name__=='__main__':
     m = lm()
     #m.lmmodels1()
-    #print(m.lmmodels1())
-    print(2+2)
+    print(m.lmmodels1())
 
 # Lags+date+clusterid = r^2 = 0.41, coef are shit
 # date+clusterid+portnumber+level1/2 = r^2 = 0.415, coef are fucked 

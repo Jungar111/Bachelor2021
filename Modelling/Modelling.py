@@ -13,7 +13,7 @@ from DataPrep.ImportData import importer
 from sklearn.model_selection import train_test_split
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
-from sklearn.metrics import r2_score, mean_absolute_error
+from sklearn.metrics import r2_score, mean_squared_error
 import tensorflow as tf
 import statsmodels.api as sm
 from sklearn.decomposition import PCA
@@ -47,9 +47,12 @@ class modelling:
         return X_train,X_test, X_val,y_train,y_test, y_val
     
     def neuralnet(self):
+        self.X_train = self.X_train.drop(columns="Start Date")
+        self.X_val = self.X_val.drop(columns="Start Date")
+        self.X_test = self.X_test.drop(columns="Start Date")
 
         model = Sequential()
-        model.add(Dense(50, input_dim=63, activation='relu'))
+        model.add(Dense(50, input_dim=78, activation='relu'))
         model.add(Dropout(rate=0.5))
         model.add(Dense(40, activation='relu'))
         model.add(Dropout(rate=0.5))
@@ -65,8 +68,10 @@ class modelling:
         y_pred = model.predict(self.X_test)
 
         # evaluate predictions
-        print("\nMAE=%f" % mean_absolute_error(self.y_test, y_pred))
+        print("\nRMSE=%f" % np.sqrt(mean_squared_error(self.y_test, y_pred)))
         print("r^2=%f" % r2_score(self.y_test, y_pred))
+        plt.scatter(self.y_test,y_pred)
+        plt.show()
 
         model.save("Models/NNWithLags.keras")
         return r2_score(self.y_test, y_pred)
@@ -124,4 +129,4 @@ class modelling:
 
 if __name__=='__main__':
     m = modelling()
-    m.LSTM()  
+    m.neuralnet() 

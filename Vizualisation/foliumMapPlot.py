@@ -1,5 +1,6 @@
 import folium
-from DataPrep.data_cleaning import clean_paloalto
+from folium.map import FeatureGroup
+from DataPrep.Data_cleaning import clean_paloalto
 import pandas as pd
 import matplotlib.dates as mdates
 import numpy as np
@@ -7,6 +8,10 @@ import matplotlib.cm as cm
 from matplotlib.colors import Normalize, rgb2hex
 import platform
 from DataPrep.grid import gridmap
+import branca.colormap as cm
+from pathlib import Path
+from folium.plugins import FloatImage
+
 
 class foliumMapPlot():
     def __init__(self):
@@ -105,9 +110,14 @@ class foliumMapPlot():
         m = folium.Map(location=[37.435, -122.16], tiles="Stamen Toner", zoom_start=13)
         if POI:
             groups = self.POI.Category.unique().tolist()
-            colors = ['red','blue','gray','orange','beige','green','purple','pink','cadetblue','black']
-            cols = dict(zip(groups,colors))
+            path = Path("Vizualisation", "legend.png")
 
+
+            colors = ['red','blue','gray','orange','beige','green','purple','pink','cadetblue','black']
+            FloatImage(path.absolute(), bottom=20, left=75).add_to(m)
+            cols = dict(zip(groups,colors))
+            print(groups)
+            
             for index, poi in self.POI.iterrows():
                 folium.Circle(
                     radius=15,
@@ -116,20 +126,30 @@ class foliumMapPlot():
                     color=cols[poi.Category],
                     fill=False,
                 ).add_to(m)
+                
+                # feature_groups[poi.Category] = FeatureGroup(name = f"{groups}")
+                # folium.Marker(location=COORDINATE).add_to(feature_groups[poi.Category])
+                # COORDINATE[0] += 10
+                # m.add_child(feature_groups[poi.Category])
 
-        lat, lon = self.getloc(self.data)
-        ptime, pmean, PSTIME = self.createdf()
-        col = [mdates.date2num(i) for i in PSTIME]
-        cmap = cm.autumn
-        norm = Normalize(vmin=min(col), vmax=max(col))
+
+
         
-        for i in range(len(lat)):
-            dat = self.data[(self.data["Latitude"] == lat[i]) & (self.data["Longitude"] == lon[i])]
-            first_use = dat["Start Date"].min()
-            last_use = dat["End Date"].min()
-            
+        
+        if Clusters:
+            lat, lon = self.getloc(self.data)
+            ptime, pmean, PSTIME = self.createdf()
+            col = [mdates.date2num(i) for i in PSTIME]
+            cmap = cm.autumn
+            norm = Normalize(vmin=min(col), vmax=max(col))
 
-            if Clusters:
+            for i in range(len(lat)):
+                dat = self.data[(self.data["Latitude"] == lat[i]) & (self.data["Longitude"] == lon[i])]
+                first_use = dat["Start Date"].min()
+                last_use = dat["End Date"].min()
+                
+                
+                
                 folium.Circle(
                     radius=np.round(pmean[i],2),
                     location=[lat[i], lon[i]],
@@ -137,34 +157,33 @@ class foliumMapPlot():
                     #color=rgb2hex(cmap(norm(col[i]))),
                     fill=True,
                 ).add_to(m)
-            else:
-                folium.Circle(
-                radius=np.round(pmean[i],2),
-                location=[lat[i], lon[i]],
-                popup=self.create_HTML(dat["Station Name"].unique()[0], ptime[i], np.round(pmean[i],2), dat["MAC Address"].unique()[0], dat["Plug Type"].unique()[0], first_use, last_use),
-                color=rgb2hex(cmap(norm(col[i]))),
-                fill=True,
-            ).add_to(m)
+                    #else:
+                #     folium.Circle(
+                #     radius=np.round(pmean[i],2),
+                #     location=[lat[i], lon[i]],
+                #     popup=self.create_HTML(dat["Station Name"].unique()[0], ptime[i], np.round(pmean[i],2), dat["MAC Address"].unique()[0], dat["Plug Type"].unique()[0], first_use, last_use),
+                #     color=rgb2hex(cmap(norm(col[i]))),
+                #     fill=True,
+                # ).add_to(m)
+                g = gridmap()
+                clusters = list(g.grid(self.data,8))
+                
+                for c in clusters:
+                    folium.Circle(
+                        radius=30,
+                        location=[c[0], c[1]],
+                        #popup=self.create_HTML(dat["Station Name"].unique()[0], ptime[i], np.round(pmean[i],2), dat["MAC Address"].unique()[0], dat["Plug Type"].unique()[0], first_use, last_use),
+                        color='red',
+                        fill=True,
+                    ).add_to(m)
             
-        if Clusters:
-            g = gridmap()
-            clusters = list(g.grid(self.data,8))
-            
-            for c in clusters:
-                folium.Circle(
-                    radius=30,
-                    location=[c[0], c[1]],
-                    #popup=self.create_HTML(dat["Station Name"].unique()[0], ptime[i], np.round(pmean[i],2), dat["MAC Address"].unique()[0], dat["Plug Type"].unique()[0], first_use, last_use),
-                    color='red',
-                    fill=True,
-                ).add_to(m)
 
         if Clusters:
-            m.save("FoliumPlots/Clusters.html")
+            m.save("Vizualisation/FoliumPlots/Clusters.html")
         else:
-            m.save("FoliumPlots/POI.html")
+            m.save("Vizualisation/FoliumPlots/POI.html")
 
 if __name__ == '__main__':
     p = foliumMapPlot()
-    p.foliumplot(False, True)
+    p.foliumplot(True, False)
 

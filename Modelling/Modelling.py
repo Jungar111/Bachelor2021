@@ -19,6 +19,9 @@ import statsmodels.api as sm
 from sklearn.decomposition import PCA
 from sklearn.kernel_ridge import KernelRidge
 from keras.layers import LSTM
+from tensorflow import keras
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 
 
@@ -50,6 +53,7 @@ class modelling:
         self.X_train = self.X_train.drop(columns="Start Date")
         self.X_val = self.X_val.drop(columns="Start Date")
         self.X_test = self.X_test.drop(columns="Start Date")
+        
 
         model = Sequential()
         model.add(Dense(50, input_dim=78, activation='relu'))
@@ -60,6 +64,7 @@ class modelling:
 
         # compile the keras model
         model.compile(loss='mse', optimizer='adam')
+        
 
         # fit the keras model on the dataset
         model.fit(self.X_train,self.y_train, epochs = 100, batch_size=128, validation_data=(self.X_val,self.y_val))

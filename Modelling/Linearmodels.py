@@ -27,7 +27,8 @@ class lm:
         print(dict(zip(self.X_train.columns,lm1.coef_)))
         plt.scatter(self.y_test,y_pred)
         plt.show()
-
+        plt.plot(y_pred)
+        plt.show()
         
     
     def ttsplit(self,df,target="Energy (kWh)"):

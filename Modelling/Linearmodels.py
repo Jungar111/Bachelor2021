@@ -21,14 +21,17 @@ class lm:
     def lmmodels1(self):
         lm1 = LinearRegression()
         lm1.fit(self.X_train,self.y_train) 
-        y_pred=lm1.predict(self.X_test)
+        y_pred=lm1.predict(self.X_train)
         print("\nRMSE=%f" % np.sqrt(mean_squared_error(self.y_test, y_pred)))
         print("r^2=%f" % r2_score(self.y_test, y_pred))
         print(dict(zip(self.X_train.columns,lm1.coef_)))
-        plt.scatter(self.y_test,y_pred)
+        plt.plot(self.y_train,y_pred)
         plt.show()
-        plt.plot(y_pred)
-        plt.show()
+        
+        #plt.scatter(self.y_test,y_pred)
+        #plt.show()
+        #plt.plot(y_pred)
+        #plt.show()
         
     
     def ttsplit(self,df,target="Energy (kWh)"):

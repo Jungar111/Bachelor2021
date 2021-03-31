@@ -26,8 +26,9 @@ class importer:
         self.df = self.to_date(self.df)
         self.df = self.df[self.df["Start Date"].dt.year < 2020]
         self.df = self.df.drop(columns=["Unnamed: 0","Original Port Type"])
-        #print(self.df.columns)
+        #rint(self.df.columns)
         self.df.columns = ['Start Date', 'Label', 'Charging Time (mins)', 'Energy (kWh)', 'Total Duration (mins)', 'Port Number','CenterLon', 'CenterLat', 'Level 1', 'Level 2']
+        
         self.df = self.resampling()
         self.df = self.df.dropna()
         self.df = self.df.apply(self.standardizeConsumption, axis=1)
@@ -67,7 +68,7 @@ class importer:
         lagsData = l.buildLaggedFeatures(data, ["Energy (kWh)"])
         return lagsData
 
-    def is_holiday(self): 
+    def is_holiday(self, df): 
         us_ca_holidays = holidays.CountryHoliday('US', state='CA')
         self.df['is_holiday'] = [1 if str(val).split()[0] in us_ca_holidays else 0 for val in self.df['Start Date']]
         #return df
@@ -88,7 +89,7 @@ class importer:
     
         return control
 
-    def is_weekend(self):
+    def is_weekend(self, df):
         self.df['is_weekend'] = (self.df['Start Date'].dt.weekday > 4).astype(int) 
         #return df
     

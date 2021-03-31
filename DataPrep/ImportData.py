@@ -35,8 +35,8 @@ class importer:
         #self.normalizedata()
         self.df = self.POIs_within_radius(self.df, self.POIs, 500)
         self.OneHotEncode()
-        self.is_holiday()
-        self.is_weekend()
+        self.is_holiday(self.df)
+        self.is_weekend(self.df)
         return self.df
 
 

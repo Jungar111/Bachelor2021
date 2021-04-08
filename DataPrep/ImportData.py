@@ -33,6 +33,7 @@ class importer:
         self.df = self.df.dropna()
         self.df = self.df.apply(self.standardizeConsumption, axis=1)
         #self.normalizedata()
+        self.LagCreation()
         self.df = self.POIs_within_radius(self.df, self.POIs, 500)
         self.OneHotEncode()
         self.is_holiday(self.df)
@@ -63,10 +64,7 @@ class importer:
 
     def LagCreation(self):
         l = lags()
-        data = self.Import()
-
-        lagsData = l.buildLaggedFeatures(data, ["Energy (kWh)"])
-        return lagsData
+        self.df = l.buildLaggedFeatures(self.df, ["Energy (kWh)"])
 
     def is_holiday(self, df): 
         us_ca_holidays = holidays.CountryHoliday('US', state='CA')

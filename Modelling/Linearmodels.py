@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 
 class lm:
     def  __init__(self):
-        #self.df = importer().Import()
-        self.df = importer().LagCreation()
+        self.df = importer().Import()
+        #self.df = importer().LagCreation()
         
         self.X_train,self.X_test, self.X_val,self.y_train,self.y_test, self.y_val = self.ttsplit(self.df)
         print(self.X_train.columns)
@@ -22,7 +22,7 @@ class lm:
         lm1 = LinearRegression()
         lm1.fit(self.X_train,self.y_train) 
         y_pred=lm1.predict(self.X_train)
-        print("\nRMSE=%f" % np.sqrt(mean_squared_error(self.y_test, y_pred)))
+        #print("\nRMSE=%f" % np.sqrt(mean_squared_error(self.y_test, y_pred)))
         print("r^2=%f" % r2_score(self.y_test, y_pred))
         print(dict(zip(self.X_train.columns,lm1.coef_)))
         plt.plot(self.y_train,y_pred)
@@ -35,7 +35,7 @@ class lm:
         
     
     def ttsplit(self,df,target="Energy (kWh)"):
-        cols = df.drop(columns=[target,"Start Date", 'Charging Time (mins)', 'Total Duration (mins)',"Port Number","Level 1","Level 2","Energy (kWh)_lag1",'Energy (kWh)_lag2','Energy (kWh)_lag3','Energy (kWh)_lag4','Energy (kWh)_lag5',"Label"]).columns.to_list()
+        #cols = df.drop(columns=[target,"Start Date", 'Charging Time (mins)', 'Total Duration (mins)',"Port Number","Level 1","Level 2","Energy (kWh)_lag1",'Energy (kWh)_lag2','Energy (kWh)_lag3','Energy (kWh)_lag4','Energy (kWh)_lag5',"Label"]).columns.to_list()
         X = df[["Energy (kWh)_lag1",'Energy (kWh)_lag2','Energy (kWh)_lag3','Energy (kWh)_lag4','Energy (kWh)_lag5']]
         #print(X.head())
         y = df[target]

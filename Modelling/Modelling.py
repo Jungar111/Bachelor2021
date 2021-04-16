@@ -134,4 +134,4 @@ class modelling:
 
 if __name__=='__main__':
     m = modelling()
-    m.neuralnet() 
+    m.lmmodels1() 

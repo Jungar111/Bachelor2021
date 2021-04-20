@@ -32,8 +32,8 @@ class Tobit:
         y_censored = np.array(self.df[self.y][self.df[self.censored] == True])
         
         
-        print(np.dot(x_censored, beta))
-        print((np.dot(x_censored, beta) - y_censored)/sd)
+        #print(np.dot(x_censored, beta))
+        #print((np.dot(x_censored, beta) - y_censored)/sd)
         ll_censored = scipy.stats.norm.logcdf((np.dot(x_censored, beta) - y_censored)/sd).sum()
         ll_not_censored = (scipy.stats.norm.logpdf(y_not_censored - np.dot(x_not_censored, beta)/sd) - math.log(max(np.finfo('float').resolution, sd))).sum()
 
@@ -51,19 +51,19 @@ class Tobit:
         return sd > 0
 
     def minimize(self, initial_guess,upper_threshold):
-        return minimize(self.nll, initial_guess, method = "Nelder-Mead",args=(upper_threshold))
+        return minimize(self.nll, initial_guess, method = "Nelder-Mead",args=(upper_threshold), tol=0.01)
 
     def Lambda(self, sd, prediction):
         return norm.pdf(prediction/sd)/norm.cdf(prediction/sd)
 
-    def predict(self, sd, prediction):
+    def predict(self, X, Beta):
         #sd = np.exp(sd)
-        return norm.cdf(prediction / sd) * (prediction + sd * self.Lambda(sd, prediction))
-
+        #return norm.cdf(prediction / sd) * (prediction + sd * self.Lambda(sd, prediction))
+        return np.dot(X,Beta)
 
 if __name__ == "__main__":
-    x1 = np.linspace(0, 10, 200)
-    x2 = np.linspace(0, 10, 200)
+    x1 = np.linspace(-5, 10, 200)
+    x2 = np.linspace(-5, 10, 200)
     y = x1*2 + x2 + np.random.normal(0,1,200)
     y[y > 15] = 15
 
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     df['censor'] = y == 15
     t = Tobit(df, 'censor',['x1','x2'], 'y')
 
-    regressor = LinearRegression().fit(df[['x1','x2']],df['y'])
+    regressor = LinearRegression(fit_intercept=False).fit(df[['x1','x2']],df['y'])
     pred = regressor.predict(df[['x1','x2']])
     beta = regressor.coef_
     print(beta)
@@ -88,17 +88,17 @@ if __name__ == "__main__":
     # plt.show()
     
     vars = np.append(beta, sd_guess)
-    print(vars)
+    #print(vars)
     mini = t.minimize(vars,15)
-    print(mini)
-    print(beta)
+    #print(mini)
+    #print(beta)
     sd = mini.x[-1]
     pred_pred = x1*mini.x[0] + x2*mini.x[1]
     print(mini)
     # pred_t = t.predict(np.exp(sd), pred_pred)
 
     plt.scatter(x1,y, label="Data", color="black",alpha=0.8)
-    plt.plot(x1, pred_pred, label="Tobit", color="red", alpha=0.8)
+    plt.plot(x1, t.predict(sd,pred_pred), label="Tobit", color="red", alpha=0.8)
     plt.plot(x1, pred, label="Linear", color="green",alpha=0.8)
     plt.legend()
     plt.show()

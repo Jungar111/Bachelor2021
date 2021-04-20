@@ -7,6 +7,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 from DataPrep.LagCreation import lags
 from sklearn.model_selection import train_test_split
 from statsmodels.tsa.statespace.sarimax import SARIMAX
+from statsmodels.tsa.arima.model import ARIMA
 import warnings
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -38,24 +39,27 @@ for i in range(8):
 
 pred = []
 days_pred = []
-train = int((len(y_cols["Label 0"].index))*0.01)
+train = int((len(y_cols["Label 0"].index))*0.8)
 re = len(y_cols["Label 0"].index)-train
 a = y_cols.index[0].to_timestamp()
 b = y_cols.index[train].to_timestamp()
-for i in range(10):#re):
-    sam = SARIMAX(y_cols["Label 0"][:b],order=(7,1,5), freq="D")
-    sam_fit = sam.fit(disp=0)
+for i in range(300):#re):
+    sam = ARIMA(y_cols["Label 0"][:b],order=(10,1,1), freq="D")
+    try:
+        sam_fit = sam.fit()
 
-    days = 1
-    n=b+pd.Timedelta(days=days)
-    n1 = n + pd.Timedelta(days=1)
-    y_pred = sam_fit.forecast(steps = days)
-    y_pred.index=y_pred.index.to_timestamp()
-    
-    pred.append(float(y_pred))
-
+        days = 1
+        n=b+pd.Timedelta(days=days)
+        n1 = n + pd.Timedelta(days=1)
+        y_pred = sam_fit.forecast(steps = days)
+        y_pred.index=y_pred.index.to_timestamp()
+        pred.append(float(y_pred))
+        days_pred.append(n)
+    except:
+        continue
+    #a = a + pd.Timedelta(days=days)
     b = b + pd.Timedelta(days=days)
-    days_pred.append(n)
+    
     print(f"Progress {i}:{re}")
 
 

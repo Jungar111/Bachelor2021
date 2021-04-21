@@ -23,7 +23,7 @@ class Tobit:
         pred = regressor.predict(np.array(self.df[self.X][self.df[self.censored] == censoring]))
         return pred
 
-    def nll(self, vars, upper_threshold):
+    def nll(self, vars):
         sd = vars[-1]
         beta = vars[:-1]
         x_not_censored = np.array(self.df[self.X][self.df[self.censored] == False])
@@ -31,18 +31,8 @@ class Tobit:
         x_censored = np.array(self.df[self.X][self.df[self.censored] == True])
         y_censored = np.array(self.df[self.y][self.df[self.censored] == True])
         
-        
-        #print(np.dot(x_censored, beta))
-        #print((np.dot(x_censored, beta) - y_censored)/sd)
         ll_censored = scipy.stats.norm.logcdf((np.dot(x_censored, beta) - y_censored)/sd).sum()
-        ll_not_censored = (scipy.stats.norm.logpdf(y_not_censored - np.dot(x_not_censored, beta)/sd) - math.log(max(np.finfo('float').resolution, sd))).sum()
-
-        # y_not_censored = self.df[self.y][self.df[self.censored] == False]
-
-        # ll_not_censored = tf.math.reduce_sum(np.log(1/sd) + tfp.distributions.Normal(loc = 0, scale =1).log_prob((y_not_censored - y_not_censored*beta)/sd))
-        
-        # y_censored = self.df[self.y][self.df[self.censored] == True]
-        # ll_censored = tf.math.reduce_sum(tfp.distributions.Normal(loc = 0, scale =1).log_cdf((y_censored*beta - y_censored)/sd))
+        ll_not_censored = (1/sd * scipy.stats.norm.logpdf(y_not_censored - np.dot(x_not_censored, beta)/sd) - math.log(max(np.finfo('float').resolution, sd))).sum()
         
         loglik = float(ll_censored + ll_not_censored)
         return - loglik

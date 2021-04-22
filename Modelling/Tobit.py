@@ -32,7 +32,7 @@ class Tobit:
         return - loglik
 
     def minimize(self, initial_guess):
-        return minimize(self.nll, initial_guess, method = "Nelder-Mead", tol=0.01)
+        return minimize(self.nll, initial_guess, method = "BFGS", tol=0.01)
 
     def predict(self, X, beta):
         return np.dot(X,beta)
@@ -52,22 +52,11 @@ if __name__ == "__main__":
     beta = regressor.coef_
     print(beta)
     sd_guess = 1.5
-    # sds = np.linspace(0.001, 3, 1000)
-    # vars = [[beta, i] for i in sds]
-    
-    
-    # nlls = []
-    # for var in vars:
-    #     nlls.append(t.nll(var,15))
-    
-    # plt.plot(sds, nlls)
-    # plt.show()
     
     vars = np.append(beta, sd_guess)
-    #print(vars)
+
     mini = t.minimize(vars)
-    #print(mini)
-    #print(beta)
+
     sd = mini.x[-1]
     pred_pred = x1*mini.x[0] + x2*mini.x[1]
     print(mini)

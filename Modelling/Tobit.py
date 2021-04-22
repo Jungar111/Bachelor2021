@@ -26,7 +26,7 @@ class Tobit:
         y_censored = np.array(self.df[self.y][self.df[self.censored] == True])
         
         ll_censored = scipy.stats.norm.logcdf((np.dot(x_censored, beta) - y_censored)/sd).sum()
-        ll_not_censored = (scipy.stats.norm.logpdf((y_not_censored - np.dot(x_not_censored, beta))/sd) - math.log(max(np.finfo('float').resolution, sd))).sum()
+        ll_not_censored = (1/sd*scipy.stats.norm.logpdf((y_not_censored - np.dot(x_not_censored, beta))/sd) - math.log(max(np.finfo('float').resolution, sd))).sum()
         
         loglik = float(ll_censored + ll_not_censored)
         return - loglik

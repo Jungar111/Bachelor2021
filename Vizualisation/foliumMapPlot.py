@@ -113,7 +113,7 @@ class foliumMapPlot():
             path = Path("Vizualisation", "legend.png")
 
 
-            colors = ['red','blue','gray','orange','beige','green','purple','pink','cadetblue','black']
+            colors = ['red','blue','gray','orange','beige','green','purple']
             FloatImage(path.absolute(), bottom=20, left=75).add_to(m)
             cols = dict(zip(groups,colors))
             print(groups)

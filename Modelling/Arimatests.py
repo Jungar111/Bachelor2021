@@ -20,8 +20,8 @@ def smape(A, F):
 
 def ArimaModels(df):
     res = pd.DataFrame(columns=["Label","ar","d","ma","AIC","r^2","RMSE","MAPE","MAE","SMAPE"])
-    with tqdm(total=2400, file=sys.stdout) as pbar:
-        for label in range(8):
+    with tqdm(total=2100, file=sys.stdout) as pbar:
+        for label in range(7):
             df1=df[df["Label"]==label]
             #df1=df1.sort_values("Start Date")
             #y = df1[["Energy (kWh)","Start Date"]].set_index("Start Date",drop=False)
@@ -40,25 +40,27 @@ def ArimaModels(df):
             #y_train["Energy (kWh)"]  = y_train["Energy (kWh)"].fillna(0)
             #y_test["Energy (kWh)"]  = y_test["Energy (kWh)"].fillna(0)
 
-
+            test = int(len(df1["Energy (kWh)"])*0.8)
             
             for ar in range(10):
                 for d in range(3):
                     for ma in range(10):
-                        
-                        sam = SARIMAX((df["Energy (kWh)"][:2500]), order=(ar,d,ma), trend="n", freq="D")
-                        sam_fit = sam.fit(method="lbfgs", disp = False, full_output = False)
-                        n=len(df[2501:])
-                        y_pred = sam_fit.forecast(steps = n)
+                        try:
+                            sam = SARIMAX((df1["Energy (kWh)"][:test]), order=(ar,d,ma), trend="n", freq="D")
+                            sam_fit = sam.fit(method="lbfgs", disp = False, full_output = False)
+                            n=len(df1[test+1:])
+                            y_pred = sam_fit.forecast(steps = n)
 
-                        AIC = sam_fit.aic
-                        r = r2_score(df["Energy (kWh)"][2501:],y_pred)
-                        RMSE = np.sqrt(mean_squared_error(df["Energy (kWh)"][2501:],y_pred))
-                        MAPE = mean_absolute_percentage_error(df["Energy (kWh)"][2501:],y_pred)
-                        MAE = mean_absolute_error(df["Energy (kWh)"][2501:],y_pred)
-                        SMAPE = smape(df["Energy (kWh)"][2501:],y_pred)
-                    
-                        results = dict(zip(list(res.columns),[label,ar,d,ma,AIC,r,RMSE,MAPE,MAE,SMAPE]))
+                            AIC = sam_fit.aic
+                            r = r2_score(df1["Energy (kWh)"][test+1:],y_pred)
+                            RMSE = np.sqrt(mean_squared_error(df1["Energy (kWh)"][test+1:],y_pred))
+                            MAPE = mean_absolute_percentage_error(df1["Energy (kWh)"][test+1:],y_pred)
+                            MAE = mean_absolute_error(df1["Energy (kWh)"][test+1:],y_pred)
+                            SMAPE = smape(df1["Energy (kWh)"][test+1:],y_pred)
+                        
+                            results = dict(zip(list(res.columns),[label,ar,d,ma,AIC,r,RMSE,MAPE,MAE,SMAPE]))
+                        except np.linalg.LinAlgError:
+                            results = dict(zip(list(res.columns),[label,ar,d,ma,np.nan,np.nan,np.nan,np.nan,np.nan,np.nan]))
                         res = res.append(results,True)
                         pbar.update(1)
 

@@ -11,6 +11,7 @@ from statsmodels.tsa.stattools import adfuller
 import numpy as np
 import pandas as pd
 import warnings
+import matplotlib.pyplot as plt
 from tqdm import tqdm
 warnings.filterwarnings("ignore")
 
@@ -18,8 +19,8 @@ def smape(A, F):
     return 100/len(A) * np.sum( np.abs(F - A) / (np.abs(A) + np.abs(F)))
 
 
-def ArimaModels(df):
-    res = pd.DataFrame(columns=["Label","ar","d","ma","AIC","r^2","RMSE","MAPE","MAE","SMAPE"])
+def ArimaModelSelection(df):
+    res = pd.DataFrame(columns=["Label","ar","d","ma","AIC"])
     with tqdm(total=2100, file=sys.stdout) as pbar:
         for label in range(7):
             df1=df[df["Label"]==label]
@@ -46,34 +47,83 @@ def ArimaModels(df):
                 for d in range(3):
                     for ma in range(10):
                         try:
-                            sam = SARIMAX((df1["Energy (kWh)"][:test]), order=(ar,d,ma), trend="n", freq="D")
+                            sam = SARIMAX((df1["Energy (kWh)"]), order=(ar,d,ma), trend="n", freq="D")
                             sam_fit = sam.fit(method="lbfgs", disp = False, full_output = False)
-                            n=len(df1[test+1:])
-                            y_pred = sam_fit.forecast(steps = n)
+                            # n=len(df1[test+1:])
+                            # y_pred = sam_fit.forecast(steps = n)
 
                             AIC = sam_fit.aic
-                            r = r2_score(df1["Energy (kWh)"][test+1:],y_pred)
-                            RMSE = np.sqrt(mean_squared_error(df1["Energy (kWh)"][test+1:],y_pred))
-                            MAPE = mean_absolute_percentage_error(df1["Energy (kWh)"][test+1:],y_pred)
-                            MAE = mean_absolute_error(df1["Energy (kWh)"][test+1:],y_pred)
-                            SMAPE = smape(df1["Energy (kWh)"][test+1:],y_pred)
+                            # r = r2_score(df1["Energy (kWh)"][test+1:],y_pred)
+                            # RMSE = np.sqrt(mean_squared_error(df1["Energy (kWh)"][test+1:],y_pred))
+                            # MAPE = mean_absolute_percentage_error(df1["Energy (kWh)"][test+1:],y_pred)
+                            # MAE = mean_absolute_error(df1["Energy (kWh)"][test+1:],y_pred)
+                            # SMAPE = smape(df1["Energy (kWh)"][test+1:],y_pred)
                         
-                            results = dict(zip(list(res.columns),[label,ar,d,ma,AIC,r,RMSE,MAPE,MAE,SMAPE]))
+                            results = dict(zip(list(res.columns),[label,ar,d,ma,AIC]))
                         except np.linalg.LinAlgError:
-                            results = dict(zip(list(res.columns),[label,ar,d,ma,np.nan,np.nan,np.nan,np.nan,np.nan,np.nan]))
+                            results = dict(zip(list(res.columns),[label,ar,d,ma,np.nan]))
                         res = res.append(results,True)
                         pbar.update(1)
-
-        
-    
     return res
 
-df = load_data()
+def ArimaModels(df):
+    pred = []
+    days_pred = []
+    train = int((len(df["Energy (kWh)"].index))*0.1)
+    re = len(df["Energy (kWh)"].index)-train
+    a = df.index[0]#.to_timestamp()
+    b = df.index[train]#.to_timestamp()
+    with tqdm(total=re, file=sys.stdout) as pbar:
+        for i in range(re):
+            try:
+                sam = SARIMAX(df["Energy (kWh)"][:b], order=(5,1,3) ,freq="D")
+                sam_fit = sam.fit(disp = False, full_output = False)
 
+                days = 1
+                n = b + pd.Timedelta(days=days)
+                y_pred = sam_fit.forecast()
+                #n1 = n + pd.Timedelta(days=1)
+                #y_pred = sam_fit.forecast(steps = days)
+                #y_pred = sam_fit.predict(start=n,end=n,typ="levels")
+                #y_pred.index=y_pred.index.to_timestamp()
+                
+                pred.append(float(y_pred))
+
+                a = a + pd.Timedelta(days=days)
+                b = b + pd.Timedelta(days=days)
+                days_pred.append(n)
+            except np.linalg.LinAlgError:
+                days = 1
+                n = b + pd.Timedelta(days=days)
+                pred.append(y_pred[-1])
+
+                a = a + pd.Timedelta(days=days)
+                b = b + pd.Timedelta(days=days)
+                days_pred.append(n)
+            pbar.update(1)
+    pred = pd.DataFrame(pred)
+    pred.index = days_pred
+
+    
+    plt.plot(df["Energy (kWh)"][days_pred[0]:days_pred[-1]],label="Actual", alpha=0.6)
+    plt.plot(pred[:-1], color="red", label="Arima Prediction", alpha=0.6)
+    plt.legend()
+    print(f'r^2 score {r2_score(df["Energy (kWh)"][days_pred[0]:days_pred[-1]],pred[:-1])}')
+    print(f'RMSE {np.sqrt(mean_squared_error(df["Energy (kWh)"][days_pred[0]:days_pred[-1]],pred[:-1]))}')
+    plt.show()
+    return pred, days_pred
+
+df = load_data()
+#df = df[df["Label"]==0]
+#df = df.drop(columns=["Charging Time (mins)","Parking Time (mins)"])
 print("Imported!")
 
-models = ArimaModels(df)
+#pred, days_pred =  ArimaModels(df)
+#pred.to_csv("data\createdDat\ARIMA_Prediction_Label0.csv")
 
-models.to_csv("ArimaModels.csv")
+
+models = ArimaModelSelection(df)
+
+models.to_csv("data\createdDat\ARIMAPred\ArimaModels.csv")
 
 print("DONE!")

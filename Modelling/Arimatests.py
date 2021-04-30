@@ -22,8 +22,8 @@ def smape(A, F):
 def ArimaModelSelection(df):
     res = pd.DataFrame(columns=["Label","ar","d","ma","AIC"])
     with tqdm(total=2100, file=sys.stdout) as pbar:
-        for label in range(7):
-            df1=df[df["Label"]==label]
+        for label in range(1):
+            df1=df[df["Label"]==7]
             #df1=df1.sort_values("Start Date")
             #y = df1[["Energy (kWh)","Start Date"]].set_index("Start Date",drop=False)
 

@@ -18,8 +18,8 @@ class Tobit:
         self.y = y
     
     def nll(self, vars):
-        sd = vars[-1]
-        beta = vars[:-1]
+        sd = 2
+        beta = vars
         x_not_censored = np.array(self.df[self.X][self.df[self.censored] == False])
         y_not_censored = np.array(self.df[self.y][self.df[self.censored] == False])
         x_censored = np.array(self.df[self.X][self.df[self.censored] == True])

@@ -47,7 +47,7 @@ if __name__ == "__main__":
     df['censor'] = y == 15
     t = Tobit(df, 'censor',['x1','x2'], 'y')
 
-    regressor = LinearRegression(fit_intercept=False).fit(df[['x1','x2']],df['y'])
+    regressor = LinearRegression(fit_intercept=False, positive=True).fit(df[['x1','x2']],df['y'])
     pred = regressor.predict(df[['x1','x2']])
     beta = regressor.coef_
     print(beta)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
     plt.scatter(x1,y, label="Data", color="black",alpha=0.8)
     plt.plot(x1, pred_t, label="Tobit", color="red", alpha=0.8)
-    plt.plot(x1, pred, label="Linear", color="green",alpha=0.8)
+    plt.plot(x1, pred, label="Linear", color="blue",alpha=0.8)
     plt.legend()
     plt.show()
 

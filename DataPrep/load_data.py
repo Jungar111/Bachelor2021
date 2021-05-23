@@ -9,7 +9,7 @@ def load_data():
     df = pd.read_csv(p)
     df = df.set_index("Date")
     df.index = pd.to_datetime(df.index)
-    df = df.drop(columns=['Charging Time (mins)', 'Parking Time (mins)'])
+    #df = df.drop(columns=['Charging Time (mins)', 'Parking Time (mins)'])
     return df
 
 

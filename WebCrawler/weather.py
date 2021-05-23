@@ -11,18 +11,18 @@ import time
 
 
 month_to_len = {
-    '01':len("January"),
-    '02':len("February"),
-    '03':len("March"),
-    '04':len("April"),
-    '05':len("May"),
-    '06':len("June"),
-    '07':len("July"),
-    '08':len("August"),
-    '09':len("September"),
-    '10':len("October"),
-    '11':len("November"),
-    '12':len("December"),
+    '01':31,
+    '02':29,
+    '03':31,
+    '04':30,
+    '05':31,
+    '06':30,
+    '07':31,
+    '08':31,
+    '09':30,
+    '10':31,
+    '11':30,
+    '12':31,
 }
 
 

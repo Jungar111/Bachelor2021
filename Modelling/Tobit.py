@@ -32,7 +32,7 @@ class Tobit:
         return - loglik
 
     def minimize(self, initial_guess):
-        return minimize(self.nll, initial_guess, method = "BFGS", tol=0.01)
+        return minimize(self.nll, initial_guess, method = "BFGS", tol=0.001)
 
     def predict(self, X, beta):
         return np.dot(X,beta)

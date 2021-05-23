@@ -18,8 +18,8 @@ class Tobit:
         self.y = y
     
     def nll(self, vars):
-        sd = 2
-        beta = vars
+        sd = vars[-1]
+        beta = vars[:-1]
         x_not_censored = np.array(self.df[self.X][self.df[self.censored] == False])
         y_not_censored = np.array(self.df[self.y][self.df[self.censored] == False])
         x_censored = np.array(self.df[self.X][self.df[self.censored] == True])
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     df['censor'] = y == 15
     t = Tobit(df, 'censor',['x1','x2'], 'y')
 
-    regressor = LinearRegression(fit_intercept=False, positive=True).fit(df[['x1','x2']],df['y'])
+    regressor = LinearRegression(fit_intercept=False).fit(df[['x1','x2']],df['y'])
     pred = regressor.predict(df[['x1','x2']])
     beta = regressor.coef_
     print(beta)

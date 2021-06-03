@@ -26,13 +26,13 @@ class Tobit:
         y_censored = np.array(self.df[self.y][self.df[self.censored] == True])
         
         ll_censored = scipy.stats.norm.logcdf((np.dot(x_censored, beta) - y_censored)/sd).sum()
-        ll_not_censored = (1/sd*scipy.stats.norm.logpdf((y_not_censored - np.dot(x_not_censored, beta))/sd) - math.log(max(np.finfo('float').resolution, sd))).sum()
+        ll_not_censored = (1/sd*scipy.stats.norm.logpdf((y_not_censored - np.dot(x_not_censored, beta))/sd)- math.log(max(np.finfo('float').resolution, sd))).sum()
         
         loglik = float(ll_censored + ll_not_censored)
         return - loglik
 
     def minimize(self, initial_guess):
-        return minimize(self.nll, initial_guess, method = "BFGS", tol=0.001)
+        return minimize(self.nll, initial_guess, method = "Nelder-Mead", tol=0.001, options={"maxiter":5000})
 
     def predict(self, X, beta):
         return np.dot(X,beta)

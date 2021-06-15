@@ -21,18 +21,19 @@ def ArimaModels(df):
     "ma.L1","ma.L2","ma.L3","ma.L4","ma.L5","ma.L6","ma.L7","ma.L8","ma.L9","sigma2"])
     train = int((len(df.index))*0.1)
     re = len(df.index)-train
-    a = df.index[0]#.to_timestamp()
+    a = df.index[train-150]#.to_timestamp()
     b = df.index[train]#.to_timestamp()
     with tqdm(total=re, file=sys.stdout) as pbar:
         for i in range(re):
             try:
                 sam = VAR(df[:b])
-                sam_fit = sam.fit()
+                sam_fit = sam.fit(maxlags=8)
+                
 
 
                 days = 1
                 n = b + pd.Timedelta(days=days)
-                y_pred = sam_fit.forecast(sam_fit.y, steps=1)
+                y_pred = sam_fit.forecast(sam_fit.y,steps=1)
                 #y_pred = pd.DataFrame(y_pred, columns=["Label0","Label1","Label2","Label3","Label4","Label5","Label6","Label7"])
                 pred.loc[i]=y_pred[0]
 
@@ -76,10 +77,11 @@ for j in range(8):
 
 print("Imported!")
 
-pred, days_pred, param =  ArimaModels(df1)
+pred, days_pred, param =  ArimaModels(df1.diff().dropna())
 pred["days_pred"] = days_pred
 pred = pred.set_index("days_pred") 
-pred.to_csv("VarPred.csv")
+
+pred.to_csv("VarPred_correct.csv")
 
 
 
